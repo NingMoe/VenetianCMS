@@ -1,0 +1,7 @@
+exports.Table = require('./Table')
+exports.Page4 = require('./Page4')
+exports.Page5 = require('./Page5')
+exports.Page6 = require('./Page6')
+exports.Form = require('./Form')
+exports.user = require('./user')
+exports.echarts = require('./echarts')
