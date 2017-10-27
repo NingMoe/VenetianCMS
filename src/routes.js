@@ -3,10 +3,32 @@ import NotFound from './views/404.vue'
 import Home from './views/Home.vue'
 import Main from './views/Main.vue'
 
+let 业务流水='./views/business-flow/',
+    开奖数据='./views/lottery-data/',
+    玩法设置='./views/play-setting/',
+    数据统计='./views/data-statistics/',
+    用户管理='./views/user-management/',
+    管理人员='./views/manager/',
+    佣金管理='./views/commissions/',
+    系统设置='./views/system-setting/',
+    站内信管理='./views/mail-management/',
+    客户关系管理='./views/guest-relationship/',
+    编辑='./views/editor/'
+
+
 
 //业务流水
-const withdraw_request = r => require.ensure([], () => r(require('./views/business-flow/withdraw-request.vue')), 'business-flow')
-const recharge_record = r => require.ensure([], () => r(require('./views/business-flow/recharge-record.vue')), 'business-flow')
+const withdraw_request = r => require.ensure([], () => r(require(业务流水+'withdraw-request.vue')), 'business-flow')
+const recharge_record = r => require.ensure([], () => r(require(业务流水+'recharge-record.vue')), 'business-flow')
+const general_bets = r => require.ensure([], () => r(require(业务流水+'general-bets.vue')), 'business-flow')
+const account_details = r => require.ensure([], () => r(require(业务流水+'account-details.vue')), 'business-flow')
+
+//开奖数据
+const lottery_limit = r => require.ensure([], () => r(require(开奖数据+'lottery-limit.vue')), 'lottery-data')
+const lottery_test = r => require.ensure([], () => r(require(开奖数据+'lottery-test.vue')), 'lottery-data')
+const manual_lottery = r => require.ensure([], () => r(require(开奖数据+'manual-lottery.vue')), 'lottery-data')
+
+
 
 
 const Temporary = r => require.ensure([], () => r(require('./views/Temporary.vue')), 'Temporary')
@@ -23,6 +45,15 @@ const ttt = r => require.ensure([], () => r(require('./views/test/ttt.vue')), 't
 
 //用户管理
 const userlist = r => require.ensure([], () => r(require('./views/user-management/userlist.vue')), 'user-management')
+
+
+
+
+
+
+
+
+
 
 
 let routes = [
@@ -57,8 +88,8 @@ let routes = [
         children: [
             { path: '/business-flow/withdraw-request', component: withdraw_request, name: '提现请求' },
             { path: '/business-flow/recharge_record', component: recharge_record, name: '充值记录' },
-            { path: '/temporary', component: Temporary, name: '普通投注' },
-            { path: '/temporary', component: Temporary, name: '帐变明细' },
+            { path: '/business-flow/general_bets', component: general_bets, name: '普通投注' },
+            { path: '/business-flow/account_details', component: account_details, name: '帐变明细' },
         ]
     },
     {
