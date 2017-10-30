@@ -44,7 +44,7 @@ const echarts = r => require.ensure([], () => r(require('./views/test/echarts.vu
 const ttt = r => require.ensure([], () => r(require('./views/test/ttt.vue')), 'test')
 
 //用户管理
-const userlist = r => require.ensure([], () => r(require('./views/user-management/userlist.vue')), 'user-management')
+const userlist = r => require.ensure([], () => r(require('./views/user-management/user-lists.vue')), 'user-management')
 
 
 
