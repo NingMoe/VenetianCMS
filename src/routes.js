@@ -24,14 +24,59 @@ const general_bets = r => require.ensure([], () => r(require(业务流水+'gener
 const account_details = r => require.ensure([], () => r(require(业务流水+'account-details.vue')), 'business-flow')
 
 //开奖数据
+const lottery1 = r => require.ensure([], () => r(require(开奖数据+'1.vue')), 'lottery-gather')
+const lottery2 = r => require.ensure([], () => r(require(开奖数据+'2.vue')), 'lottery-gather')
+const lottery3 = r => require.ensure([], () => r(require(开奖数据+'3.vue')), 'lottery-gather')
+const lottery4 = r => require.ensure([], () => r(require(开奖数据+'4.vue')), 'lottery-gather')
+const lottery5 = r => require.ensure([], () => r(require(开奖数据+'5.vue')), 'lottery-gather')
+const lottery6 = r => require.ensure([], () => r(require(开奖数据+'6.vue')), 'lottery-gather')
+const lottery7 = r => require.ensure([], () => r(require(开奖数据+'7.vue')), 'lottery-gather')
+const lottery8 = r => require.ensure([], () => r(require(开奖数据+'8.vue')), 'lottery-gather')
+const lottery9 = r => require.ensure([], () => r(require(开奖数据+'9.vue')), 'lottery-gather')
+const lottery10 = r => require.ensure([], () => r(require(开奖数据+'10.vue')), 'lottery-gather')
+const lottery11 = r => require.ensure([], () => r(require(开奖数据+'11.vue')), 'lottery-gather')
+const lottery12 = r => require.ensure([], () => r(require(开奖数据+'12.vue')), 'lottery-gather')
 const lottery_limit = r => require.ensure([], () => r(require(开奖数据+'lottery-limit.vue')), 'lottery-data')
 const lottery_test = r => require.ensure([], () => r(require(开奖数据+'lottery-test.vue')), 'lottery-data')
 const manual_lottery = r => require.ensure([], () => r(require(开奖数据+'manual-lottery.vue')), 'lottery-data')
 
+//玩法设置
+const play_setting = r => require.ensure([], () => r(require(玩法设置+'index.vue')), 'play-setting')
+const set_rate = r => require.ensure([], () => r(require(玩法设置+'set-rate.vue')), 'play-setting')
 
+//数据统计
+const survey = r => require.ensure([], () => r(require(数据统计+'survey.vue')), 'data-statistics')
+const comprehensive = r => require.ensure([], () => r(require(数据统计+'comprehensive.vue')), 'data-statistics')
+const risk = r => require.ensure([], () => r(require(数据统计+'risk.vue')), 'data-statistics')
 
+//用户管理
+const add_vip = r => require.ensure([], () => r(require(用户管理+'add-vip.vue')), 'data-statistics')
+const user_lists = r => require.ensure([], () => r(require(用户管理+'user-lists.vue')), 'data-statistics')
+const bank_info = r => require.ensure([], () => r(require(用户管理+'bank-info.vue')), 'data-statistics')
+const login_log = r => require.ensure([], () => r(require(用户管理+'login-log.vue')), 'data-statistics')
+const account_recharge = r => require.ensure([], () => r(require(用户管理+'account-recharge.vue')), 'data-statistics')
 
-const Temporary = r => require.ensure([], () => r(require('./views/Temporary.vue')), 'Temporary')
+//管理人员
+const manager_lists = r => require.ensure([], () => r(require(管理人员+'manager-lists.vue')), 'manager')
+const manager_login_log= r => require.ensure([], () => r(require(管理人员+'manager-login-log.vue')), 'manager')
+
+//佣金管理
+const commissions= r => require.ensure([], () => r(require(佣金管理+'index.vue')), 'commissions')
+
+//系统设置
+const adv_center= r => require.ensure([], () => r(require(系统设置+'adv-center.vue')), 'system-setting')
+const receivable_setting= r => require.ensure([], () => r(require(系统设置+'receivable-setting.vue')), 'system-setting')
+const web_setting= r => require.ensure([], () => r(require(系统设置+'web-setting.vue')), 'system-setting')
+
+//站内信管理
+const mail_send= r => require.ensure([], () => r(require(站内信管理+'mail-send.vue')), 'mail-management')
+const mail_outbox= r => require.ensure([], () => r(require(站内信管理+'mail-outbox.vue')), 'mail-management')
+
+//客户关系管理
+const guest_relationship= r => require.ensure([], () => r(require(客户关系管理+'index.vue')), 'guest-relationship')
+
+//编辑
+const editor= r => require.ensure([], () => r(require(编辑+'index.vue')), 'editor')
 
 //测试
 const Table = r => require.ensure([], () => r(require('./views/test/Table.vue')), 'test')
@@ -45,11 +90,6 @@ const ttt = r => require.ensure([], () => r(require('./views/test/ttt.vue')), 't
 
 //用户管理
 const userlist = r => require.ensure([], () => r(require('./views/user-management/user-lists.vue')), 'user-management')
-
-
-
-
-
 
 
 
@@ -98,21 +138,21 @@ let routes = [
         name: '开奖数据',
         iconCls: 'fa fa-building-o',
         children: [
-            { path: '/temporary', component: Temporary, name: '重庆时时彩' },
-            { path: '/temporary', component: Temporary, name: '香港六合彩' },
-            { path: '/temporary', component: Temporary, name: '广西快三' },
-            { path: '/temporary', component: Temporary, name: '时时快三' },
-            { path: '/temporary', component: Temporary, name: '北京PK拾' },
-            { path: '/temporary', component: Temporary, name: '幸运农场' },
-            { path: '/temporary', component: Temporary, name: '澳门2分彩' },
-            { path: '/temporary', component: Temporary, name: '急速六合彩' },
-            { path: '/temporary', component: Temporary, name: '香港时时彩' },
-            { path: '/temporary', component: Temporary, name: '暴力摩托' },
-            { path: '/temporary', component: Temporary, name: '澳门快三' },
-            { path: '/temporary', component: Temporary, name: '吉林快三' },
-            { path: '/temporary', component: Temporary, name: '限额设置' },
-            { path: '/temporary', component: Temporary, name: '开奖检测' },
-            { path: '/temporary', component: Temporary, name: '手动开奖' },
+            { path: '/lottery-gather/lottery1', component: lottery1, name: '重庆时时彩' },
+            { path: '/lottery-gather/lottery2', component: lottery2, name: '香港六合彩' },
+            { path: '/lottery-gather/lottery3', component: lottery3, name: '广西快三' },
+            { path: '/lottery-gather/lottery4', component: lottery4, name: '时时快三' },
+            { path: '/lottery-gather/lottery5', component: lottery5, name: '北京PK拾' },
+            { path: '/lottery-gather/lottery6', component: lottery6, name: '幸运农场' },
+            { path: '/lottery-gather/lottery7', component: lottery7, name: '澳门2分彩' },
+            { path: '/lottery-gather/lottery8', component: lottery8, name: '急速六合彩' },
+            { path: '/lottery-gather/lottery9', component: lottery9, name: '香港时时彩' },
+            { path: '/lottery-gather/lottery10', component: lottery10, name: '暴力摩托' },
+            { path: '/lottery-gather/lottery11', component: lottery11, name: '澳门快三' },
+            { path: '/lottery-gather/lottery12', component: lottery12, name: '吉林快三' },
+            { path: '/lottery-gather/lottery-limit', component: lottery_limit, name: '限额设置' },
+            { path: '/lottery-gather/lottery-test', component: lottery_test, name: '开奖检测' },
+            { path: '/lottery-gather/manual-lottery', component: manual_lottery, name: '手动开奖' },
         ]
     },
     {
@@ -122,8 +162,8 @@ let routes = [
         iconCls: 'fa fa-clock-o',
         // leaf: true,
         children: [
-            { path: '/temporary', component: Temporary, name: '玩法设置' },
-            { path: '/temporary', component: Temporary, name: '动态设置赔率' }
+            { path: '/play-setting/play-setting', component: play_setting, name: '玩法设置' },
+            { path: '/play-setting/set-rate', component: set_rate, name: '动态设置赔率' }
         ]
     },
     {
@@ -132,9 +172,9 @@ let routes = [
         name: '数据统计',
         iconCls: 'fa fa-bar-chart-o',
         children: [
-            { path: '/echarts', component: echarts, name: '统计概况' },
-            { path: '/temporary', component: Temporary, name: '综合统计'},
-            { path: '/temporary', component: Temporary, name: '投注内容排行'},
+            { path: '/data-statistics/survey', component: survey, name: '统计概况' },
+            { path: '/data-statistics/comprehensive', component: comprehensive, name: '综合统计'},
+            { path: '/data-statistics/risk', component: risk, name: '投注内容排行'},
         ]
     },
     {
@@ -143,11 +183,11 @@ let routes = [
         name: '用户管理',
         iconCls: 'fa fa-users',
         children: [
-            { path: '/user-management', component: Temporary, name: '增加会员' },
-            { path: '/user-management/userlist', component: userlist, name: '用户列表' },
-            { path: '/user-management', component: Temporary, name: '银行信息' },
-            { path: '/user-management', component: Temporary, name: '登录日志' },
-            { path: '/user-management', component: Temporary, name: '账号充值' },
+            { path: '/user-management/add_vip', component: add_vip, name: '增加会员' },
+            { path: '/user-management/user_lists', component: user_lists, name: '用户列表' },
+            { path: '/user-management/bank_inof', component: bank_info, name: '银行信息' },
+            { path: '/user-management/login_log', component: login_log, name: '登录日志' },
+            { path: '/user-management/account_recharge', component: account_recharge, name: '账号充值' },
         ]
     },
     {
@@ -156,8 +196,8 @@ let routes = [
         name: '管理人员',
         iconCls: 'fa fa-user-circle',
         children: [
-            { path: '/temporary', component: Temporary, name: '管理员列表' },
-            { path: '/temporary', component: Temporary, name: '管理员登录日志' },
+            { path: '/manager/manager_lists', component: manager_lists, name: '管理员列表' },
+            { path: '/manager/manager_login_log', component: manager_login_log, name: '管理员登录日志' },
         ]
     },
     {
@@ -166,7 +206,7 @@ let routes = [
         name: '佣金管理',
         iconCls: 'fa fa-yen',
         children: [
-            { path: '/temporary', component: Temporary, name: '代理佣金管理' }
+            { path: '/commissions/index', component: commissions, name: '代理佣金管理' }
         ]
     },
     {
@@ -175,9 +215,9 @@ let routes = [
         name: '系统设置',
         iconCls: 'fa fa-desktop',
         children: [
-            { path: '/temporary', component: Temporary, name: '公告中心' },
-            { path: '/temporary', component: Temporary, name: '收款设置' },
-            { path: '/temporary', component: Temporary, name: '网站设置' },
+            { path: '/system-setting/adv_center', component: adv_center, name: '公告中心' },
+            { path: '/system-setting/receivable_setting', component: receivable_setting, name: '收款设置' },
+            { path: '/system-setting/web_setting', component: web_setting, name: '网站设置' },
         ]
     },
     {
@@ -186,8 +226,8 @@ let routes = [
         name: '站内信管理',
         iconCls: 'fa fa-envelope-open-o',
         children: [
-            { path: '/temporary', component: Temporary, name: '发信息' },
-            { path: '/temporary', component: Temporary, name: '收件箱' },
+            { path: '/mail-management/mail_send', component: mail_send, name: '发信息' },
+            { path: '/mail-management/mail_outbox', component: mail_outbox, name: '收件箱' },
         ]
     },
     {
@@ -196,7 +236,7 @@ let routes = [
         name: '客户关系管理',
         iconCls: 'fa fa-address-card',
         children: [
-            { path: '/temporary', component: Temporary, name: '代理申请记录' }
+            { path: '/guest-relationship/index', component: guest_relationship, name: '代理申请记录' }
         ]
     },
     {
@@ -205,7 +245,7 @@ let routes = [
         name: '编辑',
         iconCls: 'fa fa-edit',
         children: [
-           { path: '/temporary', component: Temporary, name: '公告编辑'}
+           { path: '/editor/index', component: editor, name: '公告编辑'}
         ]
     },
     {
