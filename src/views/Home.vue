@@ -27,6 +27,24 @@
                     <div class="tools" @click.prevent="collapse">
                         <i class="fa fa-navicon"></i>
                     </div>
+                    <el-row class="header-button">
+                       <el-col :span="4" class="btn-box">
+                           <a href="#/business-flow/general_bets" class="pan-btn green-btn">普通投注</a>
+                       </el-col>
+                        <el-col :span="4" class="btn-box">
+                           <a href="#/user-management/user_lists" class="pan-btn tiffany-btn">用户列表</a>
+                       </el-col>
+                       <el-col :span="4" class="btn-box">
+                           <a href="#/user-management/account_recharge" class="pan-btn yellow-btn">账号充值</a>
+                       </el-col>
+                       <el-col :span="4" class="btn-box">
+                           <a href="#" class="pan-btn pink-btn">清空缓存</a>
+                       </el-col>
+                       <el-col :span="4" class="btn-box">
+                           <a href="#" class="pan-btn pink-btn">关闭提醒</a>
+                       </el-col>
+                    </el-row>
+                    
                 </el-col>
                 
                 <el-col :span="4" class="userinfo">
@@ -98,11 +116,9 @@ export default {
         resource: "",
         desc: ""
       },
-        dynamicTags: [
-
-        ],
-        inputVisible: false,
-        inputValue: ''
+      dynamicTags: [],
+      inputVisible: false,
+      inputValue: ""
     };
   },
   methods: {
@@ -169,39 +185,37 @@ export default {
 
     //头部标签
     handleCloses(tag) {
-        this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
-        window.history.go(-1)
-      },
-      addTag(tag){
-        //   console.log(tag);
-        if(tag && typeof tag==='object'){
-            let tagdata= {
-              name: tag.name, 
-              type: '',
-              href:'#'+tag.path
-          };
-          let _dynamicTags=this.dynamicTags
-          let s=true
-          for(let i=0;i<_dynamicTags.length;i++){
-              if(tagdata.href==_dynamicTags[i].href && tagdata.name==_dynamicTags[i].name){
-                  s=false
-              }
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      window.history.go(-1);
+    },
+    addTag(tag) {
+      //   console.log(tag);
+      if (tag && typeof tag === "object") {
+        let tagdata = {
+          name: tag.name,
+          type: "",
+          href: "#" + tag.path
+        };
+        let _dynamicTags = this.dynamicTags;
+        let s = true;
+        for (let i = 0; i < _dynamicTags.length; i++) {
+          if (
+            tagdata.href == _dynamicTags[i].href &&
+            tagdata.name == _dynamicTags[i].name
+          ) {
+            s = false;
           }
-          if(tagdata && s){
-              this.dynamicTags.push(tagdata)
-              if(this.dynamicTags.length>10){
-                  console.log('超出了');
-              }
-              
-          }
-        }else{
-            
         }
-      },
-      selectTag(id){
-          
+        if (tagdata && s) {
+          this.dynamicTags.push(tagdata);
+          if (this.dynamicTags.length > 10) {
+            console.log("超出了");
+          }
+        }
+      } else {
       }
-
+    },
+    selectTag(id) {}
   },
 
   mounted() {
@@ -218,31 +232,27 @@ export default {
 <style scoped lang="scss">
 @import "~scss_vars";
 
-
-
- .v-collapsed {
-    .main {
-      transform: translate(-140px)!important ;
-      .el-menu {
-        transform: translate(132px)!important ;
-      }
-    }
-    .main:hover {
-      width: calc(180px + 140px);
-      box-shadow: 3px 0px 12px rgba(0, 0, 0, 0.5);
-    }
-    .main:hover .el-menu {
-        transform: translate(140px)!important ;
-        
-    }
-    .content-container{
-        margin-left: 40px !important ;
-    }
-    .tools>.fa-navicon{
-         transform:rotate(0deg)!important ;
+.v-collapsed {
+  .main {
+    transform: translate(-140px) !important;
+    .el-menu {
+      transform: translate(132px) !important;
     }
   }
-
+  .main:hover {
+    width: calc(180px + 140px);
+    box-shadow: 3px 0px 12px rgba(0, 0, 0, 0.5);
+  }
+  .main:hover .el-menu {
+    transform: translate(140px) !important;
+  }
+  .content-container {
+    margin-left: 40px !important;
+  }
+  .tools > .fa-navicon {
+    transform: rotate(0deg) !important;
+  }
+}
 
 .container {
   position: absolute;
@@ -254,6 +264,7 @@ export default {
     line-height: $h;
     background: $color-primary;
     color: rgb(72, 87, 106);
+    overflow: hidden;
     .userinfo {
       text-align: right;
       padding-right: 8px;
@@ -278,16 +289,127 @@ export default {
       width: 60px;
     }
     .tools {
-      padding: 0px 8px;
-      width: 14px;
+      padding: 0px 16px;
+      width: 32px;
       height: $h;
       line-height: 70px;
       cursor: pointer;
+      float: left;
+    }
+    .header-button {
+      // margin-left: 16px;
+      float: left;
+      width: calc(100% - 64px);
+      padding-top: 10px;
+      .btn-box {
+        position: relative;
+      }
+      .pan-btn {
+        line-height: 14px;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 14px;
+        color: #fff;
+        border: none;
+        outline: none;
+        transition: all 0.6s ease;
+        position: relative;
+        display: inline-block;
+        text-decoration: none;
+        overflow: hidden;
+      }
+      .pan-btn::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 2px;
+        width: 0;
+        transition: all 0.4s ease;
+        // background : #fff;
+      }
+      .pan-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 2px;
+        width: 0;
+        transition: all 0.4s ease;
+      }
+      .pan-btn:hover {
+        background: #fff;
+      }
+      .green-btn {
+        background: #30b08f;
+      }
+
+      .tiffany-btn {
+        background: #4ab7bd;
+      }
+      .yellow-btn {
+        background: #fec171;
+      }
+      .pink-btn {
+        background: #e65d6e;
+      }
+
+      //
+      .green-btn:hover {
+        color: #30b08f;
+        border-radius: 3px;
+      }
+      .green-btn:hover::after {
+        background: #30b08f;
+        width: 100%;
+      }
+      .green-btn:hover::before {
+        background: #30b08f;
+        width: 100%;
+      }
+
+      .tiffany-btn:hover {
+        color: #4ab7bd;
+      }
+
+      .tiffany-btn:hover::after {
+        background: #4ab7bd;
+        width: 100%;
+      }
+      .tiffany-btn:hover::before {
+        background: #4ab7bd;
+        width: 100%;
+      }
+
+      .yellow-btn:hover {
+        color: #fec171;
+      }
+      .yellow-btn:hover::after {
+        background: #fec171;
+        width: 100%;
+      }
+      .yellow-btn:hover::before {
+        background: #fec171;
+        width: 100%;
+      }
+
+      .pink-btn:hover {
+        color: #e65d6e;
+      }
+
+      .pink-btn:hover::after {
+        background: #e65d6e;
+        width: 100%;
+      }
+      .pink-btn:hover::before {
+        background: #e65d6e;
+        width: 100%;
+      }
     }
     .fa-navicon {
       font-size: 30px;
       transition: all 0.25s ease;
-      transform:rotate(90deg);
+      transform: rotate(90deg);
     }
     .full-screen {
       font-size: 30px;
@@ -306,51 +428,44 @@ export default {
     // flex: 1;
     transition: all 0.25s ease;
     overflow: hidden;
-    
-    .breadcrumb-container {
-      
 
-        height: $h;
-        line-height: $h;
+    .breadcrumb-container {
+      height: $h;
+      line-height: $h;
       .v-tag {
         // width: 600px;
         float: left;
         color: #475669;
         // margin-left: 20px;
-        .tags-view{
-            margin-left: 20px;
-            
+        .tags-view {
+          margin-left: 20px;
         }
       }
       .breadcrumb-inner {
-          height: $h;
-          line-height: $h;
+        height: $h;
+        line-height: $h;
         float: left;
         margin-left: 12px;
       }
     }
 
     .content-wrapper {
-        margin: 0px 10px 10px 10px;
-        padding-left: 15px;
-        background: #f2f2f2;
-        box-sizing: border-box;
-        overflow-y: scroll;
+      margin: 0px 10px 10px 10px;
+      padding-left: 15px;
+      background: #f2f2f2;
+      box-sizing: border-box;
+      overflow-y: scroll;
     }
-    .rowbox{
+    .rowbox {
+      height: 100%;
+      .grid-content {
         height: 100%;
-        .grid-content{
-            height: 100%;
-            .content-wrapper{
-                height: calc(100% - 120px);
-                
-            }
+        .content-wrapper {
+          height: calc(100% - 120px);
         }
+      }
     }
-    
   }
-
- 
 
   .main {
     width: 180px;

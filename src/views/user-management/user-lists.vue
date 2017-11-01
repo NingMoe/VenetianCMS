@@ -182,9 +182,9 @@
 					this.users = res.data.users;
 					this.listLoading = false;
                     //NProgress.done();
-                    console.log(this.users)
+                    // console.log(this.users)
                 });
-                console.log(getvUserListPage(''))
+                // console.log(getvUserListPage(''))
 			},
 			//删除
 			handleDel: function (index, row) {
@@ -298,7 +298,11 @@
 			}
 		},
 		mounted() {
-			this.getUsers();
+            this.getUsers();
+            ()=>{
+                console.log(this.users)
+                
+            }
 		}
 	}
 
