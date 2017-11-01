@@ -34,9 +34,8 @@
                     <el-dropdown trigger="hover">
                         <span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item>我的消息</el-dropdown-item>
                             <el-dropdown-item>设置</el-dropdown-item>
-                            <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+                            <el-dropdown-item  @click.native="logout">退出登录</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                     <div class="full-screen" @click.prevent="fullScreen">
@@ -47,7 +46,7 @@
 
          
             
-            <el-row >
+            <el-row class="rowbox">
 				<div class="grid-content bg-purple-light">
 					<div class="breadcrumb-container">
 						
@@ -257,7 +256,7 @@ export default {
     color: rgb(72, 87, 106);
     .userinfo {
       text-align: right;
-      padding-right: 35px;
+      padding-right: 8px;
       float: right;
       .userinfo-inner {
         cursor: pointer;
@@ -279,7 +278,7 @@ export default {
       width: 60px;
     }
     .tools {
-      padding: 0px 23px;
+      padding: 0px 8px;
       width: 14px;
       height: $h;
       line-height: 70px;
@@ -327,7 +326,7 @@ export default {
           height: $h;
           line-height: $h;
         float: left;
-        margin-left: 20px;
+        margin-left: 12px;
       }
     }
 
@@ -338,6 +337,17 @@ export default {
         box-sizing: border-box;
         overflow-y: scroll;
     }
+    .rowbox{
+        height: 100%;
+        .grid-content{
+            height: 100%;
+            .content-wrapper{
+                height: calc(100% - 120px);
+                
+            }
+        }
+    }
+    
   }
 
  
