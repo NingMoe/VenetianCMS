@@ -38,10 +38,10 @@
                            <a href="#/user-management/account_recharge" class="pan-btn yellow-btn">账号充值</a>
                        </el-col>
                        <el-col :span="4" class="btn-box">
-                           <a href="#" class="pan-btn pink-btn">清空缓存</a>
+                           <a  class="pan-btn pink-btn" @click="clearCache">清空缓存</a>
                        </el-col>
                        <el-col :span="4" class="btn-box">
-                           <a href="#" class="pan-btn pink-btn">关闭提醒</a>
+                           <a  class="pan-btn pink-btn">关闭提醒</a>
                        </el-col>
                     </el-row>
                     
@@ -118,7 +118,8 @@ export default {
       },
       dynamicTags: [],
       inputVisible: false,
-      inputValue: ""
+      inputValue: "",
+      clearCacheLoading:false
     };
   },
   methods: {
@@ -214,6 +215,13 @@ export default {
         }
       } else {
       }
+    },
+    clearCache(){
+        this.$message({
+          showClose: true,
+          message: '清空成功',
+          type: 'success'
+        });
     },
     selectTag(id) {}
   },
