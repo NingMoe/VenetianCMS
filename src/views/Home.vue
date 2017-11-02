@@ -311,6 +311,9 @@ export default {
       padding-top: 10px;
       .btn-box {
         position: relative;
+        a{
+            cursor:pointer;
+        }
       }
       .pan-btn {
         line-height: 14px;

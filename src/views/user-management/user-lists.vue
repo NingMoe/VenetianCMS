@@ -36,25 +36,25 @@
 
 		<!--列表-->
 		<el-table :data="users" highlight-current-row v-loading="listLoading" element-loading-text="拼命加载中..." @selection-change="selsChange" style="width: 100%;">
-			<el-table-column prop="name" label="用户名" width="150" sortable>
+			<el-table-column prop="name" label="用户名" min-width="100" sortable>
 			</el-table-column>
-			<el-table-column prop="sex" label="类型" width="100" sortable>
+			<el-table-column prop="sex" label="类型" min-width="100" sortable>
 			</el-table-column>
-			<el-table-column prop="age" label="邀请码" width="150" sortable>
+			<el-table-column prop="age" label="邀请码" min-width="130" sortable>
 			</el-table-column>
-			<el-table-column prop="" label="手机号" width="150" sortable>
+			<el-table-column prop="" label="手机号" min-width="130" sortable>
 			</el-table-column>
-			<el-table-column prop="" label="上级关系" width="150" sortable>
+			<el-table-column prop="" label="上级关系" min-width="130" sortable>
 			</el-table-column>
-            <el-table-column prop="" label="可用金额" width="180" sortable>
+            <el-table-column prop="" label="可用金额" min-width="150" sortable>
 			</el-table-column>
-            <el-table-column prop="" label="账号状态" width="120" sortable>
+            <el-table-column prop="" label="账号状态" min-width="120" sortable>
 			</el-table-column>
-            <el-table-column prop="lastloginTime" label="最后登录时间" width="180" sortable>
+            <el-table-column prop="lastloginTime" label="最后登录时间" width="200" sortable>
 			</el-table-column>
-            <el-table-column prop="name" label="备注" width="180" sortable>
+            <el-table-column prop="name" label="备注" min-width="130" sortable>
 			</el-table-column>
-			<el-table-column label="操作" min-width="180">
+			<el-table-column label="操作" min-width="280">
 				<template scope="scope">
 					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<el-button type="danger" size="small" @click="handleFreeze(scope.$index, scope.row)">冻结</el-button>
