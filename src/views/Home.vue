@@ -187,7 +187,7 @@ export default {
     //头部标签
     handleCloses(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
-      window.history.go(-1);
+    //   window.history.go(-1);
     },
     addTag(tag) {
       //   console.log(tag);
@@ -207,11 +207,11 @@ export default {
             s = false;
           }
         }
-        if (tagdata && s) {
+        if (tagdata && s && this.dynamicTags.length < 10) {
           this.dynamicTags.push(tagdata);
-          if (this.dynamicTags.length > 10) {
+          
             console.log("超出了");
-          }
+          
         }
       } else {
       }
