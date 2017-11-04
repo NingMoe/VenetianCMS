@@ -21,7 +21,7 @@ Vue.use(ElementUI)
 Vue.use(VueRouter)
 Vue.use(Vuex)
 
-//NProgress.configure({ showSpinner: false });
+//NProgress.configure({ showSpinner: false });beforeEach
 
 const router = new VueRouter({
   routes

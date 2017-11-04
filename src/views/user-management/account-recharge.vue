@@ -1,6 +1,6 @@
 <template>
 	<el-form ref="form" :model="account" label-width="80px" @submit.prevent="onSubmit" style="margin:0 auto;width:300px;min-width:300px;margin-top:20px;">
-        <el-form-item label="用户名">
+        <el-form-item label="用户名" >
 			<el-input v-model="account.name" placeholder="用户名"></el-input>
 		</el-form-item>
         <el-form-item label="账户余额">

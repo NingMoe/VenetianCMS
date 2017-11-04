@@ -3,49 +3,45 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
-				<el-form-item>
-					<el-input v-model="filters.name" placeholder="姓名"></el-input>
+				<el-form-item label="用户名">
+					<el-input v-model="filters.name" placeholder="请输入用户名"></el-input>
 				</el-form-item>
+                <el-form-item label="IP">
+					<el-input v-model="filters.number" placeholder="请输入IP地址"></el-input>
+				</el-form-item>
+                <el-form-item label="最后登录时间">
+                    <el-date-picker
+                        v-model="filters.LastLoginTime"
+                        type="daterange"
+                        align="right"
+                        placeholder="选择日期范围"
+                        :picker-options="pickerOptions2">
+                    </el-date-picker>
+                </el-form-item>
+
 				<el-form-item>
 					<el-button type="primary" v-on:click="getUsers">查询</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="handleAdd">新增</el-button>
+					<el-button @click="handleAdd">重置</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="users" highlight-current-row v-loading="listLoading" element-loading-text="拼命加载中..." @selection-change="selsChange" style="width: 100%;">
-			<el-table-column prop="usename" label="用户名" width="120" sortable>
+		<el-table :data="users" highlight-current-row v-loading="listLoading" element-loading-text="拼命加载中..." @selection-change="selsChange" style="width: 100%;" >
+			<el-table-column prop="usename" label="用户名" width="120" sortable align="center">
 			</el-table-column>
-			<el-table-column prop="sex" label="类型" width="100" sortable>
+			<el-table-column prop="sex" label="IP" min-width="100" sortable align="center">
 			</el-table-column>
-			<el-table-column prop="age" label="邀请码" width="100" sortable>
+			<el-table-column prop="age" label="地点" min-width="100" sortable align="center">
 			</el-table-column>
-			<el-table-column prop="birth" label="手机号" width="120" sortable>
-			</el-table-column>
-			<el-table-column prop="addr" label="上级关系" min-width="180" sortable>
-			</el-table-column>
-            <el-table-column prop="addr" label="可用金额" min-width="180" sortable>
-			</el-table-column>
-            <el-table-column prop="addr" label="账号状态" min-width="180" sortable>
-			</el-table-column>
-            <el-table-column prop="addr" label="最后登录时间" min-width="180" sortable>
-			</el-table-column>
-            <el-table-column prop="addr" label="备注" min-width="180" sortable>
-			</el-table-column>
-			<el-table-column label="操作" width="150">
-				<template scope="scope">
-					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
-				</template>
+			<el-table-column prop="birth" label="最后登录时间" min-width="120" sortable align="center">
 			</el-table-column>
 		</el-table>
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
-			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
 			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="15" :total="total" style="float:right;">
 			</el-pagination>
 		</el-col>

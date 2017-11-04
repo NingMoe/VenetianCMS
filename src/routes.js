@@ -113,11 +113,11 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '威尼斯后台管理系统',
+        name: '后台管理系统',
         iconCls: 'fa fa-dashboard',
         leaf: true,
         children: [
-            { path: '/main', component: Main, name: '威尼斯后台管理系统', hidden: true },
+            { path: '/main', component: Main, name: '后台管理系统', hidden: true },
         ]
     },
     {

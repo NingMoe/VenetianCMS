@@ -3,45 +3,45 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
-				<el-form-item>
-					<el-input v-model="filters.name" placeholder="姓名"></el-input>
+				<el-form-item label="用户名">
+					<el-input v-model="filters.name" placeholder="请输入用户名"></el-input>
 				</el-form-item>
+                <el-form-item label="IP">
+					<el-input v-model="filters.number" placeholder="请输入IP地址"></el-input>
+				</el-form-item>
+                <el-form-item label="最后登录时间">
+                    <el-date-picker
+                        v-model="filters.LastLoginTime"
+                        type="daterange"
+                        align="right"
+                        placeholder="选择日期范围"
+                        :picker-options="pickerOptions2">
+                    </el-date-picker>
+                </el-form-item>
+
 				<el-form-item>
 					<el-button type="primary" v-on:click="getUsers">查询</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="handleAdd">新增</el-button>
+					<el-button @click="handleAdd">重置</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="users" highlight-current-row v-loading="listLoading" element-loading-text="拼命加载中..." @selection-change="selsChange" style="width: 100%;">
-			<el-table-column type="selection" width="55">
+		<el-table :data="users" highlight-current-row v-loading="listLoading" element-loading-text="拼命加载中..." @selection-change="selsChange" style="width: 100%;" >
+			<el-table-column prop="usename" label="用户名" width="120" sortable align="center">
 			</el-table-column>
-			<el-table-column type="index" width="60">
+			<el-table-column prop="sex" label="IP" min-width="100" sortable align="center">
 			</el-table-column>
-			<el-table-column prop="name" label="姓名" width="120" sortable>
+			<el-table-column prop="age" label="地点" min-width="100" sortable align="center">
 			</el-table-column>
-			<el-table-column prop="sex" label="性别" width="100" :formatter="formatSex" sortable>
-			</el-table-column>
-			<el-table-column prop="age" label="年龄" width="100" sortable>
-			</el-table-column>
-			<el-table-column prop="birth" label="生日" width="120" sortable>
-			</el-table-column>
-			<el-table-column prop="addr" label="地址" min-width="180" sortable>
-			</el-table-column>
-			<el-table-column label="操作" width="150">
-				<template scope="scope">
-					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
-				</template>
+			<el-table-column prop="birth" label="最后登录时间" min-width="120" sortable align="center">
 			</el-table-column>
 		</el-table>
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
-			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
 			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="15" :total="total" style="float:right;">
 			</el-pagination>
 		</el-col>
@@ -107,7 +107,7 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+	import { getvUserListPage, removeUser, batchRemoveUser, editUser, addUser ,getvUserList } from '../../api/api';
 
 	export default {
 		data() {
@@ -173,13 +173,14 @@
 				};
 				this.listLoading = true;
 				//NProgress.start();
-				getUserListPage(para).then((res) => {
+				getvUserListPage(para).then((res) => {
 					this.total = res.data.total;
 					this.users = res.data.users;
 					this.listLoading = false;
                     //NProgress.done();
                     console.log(this.users)
                 });
+                console.log(getvUserListPage(''))
 			},
 			//删除
 			handleDel: function (index, row) {
