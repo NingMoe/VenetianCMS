@@ -44,7 +44,7 @@
 		<el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false" size="tiny">
             <el-form :model="editForm" label-width="100px" ref="editForm" :rules="addFormRules">
                 <el-form-item label="用户名" >
-                    <el-input v-model="filters.name"></el-input>
+                    <el-input v-model="filters.name" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item label="银行名称" prop="name">
                     <el-input v-model="filters.name"></el-input>

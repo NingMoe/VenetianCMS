@@ -75,7 +75,7 @@
 		<el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false" >
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm" :inline="true">
 				<el-form-item label="用户名" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
 				</el-form-item>
 				<el-form-item label="类型" >
                     <el-select v-model="filters.viptype" placeholder="选择类型">
@@ -99,28 +99,28 @@
 					<el-input v-model="editForm.name" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="投注总额" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
 				</el-form-item>
                 <el-form-item label="中奖金额" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
 				</el-form-item>
 				<el-form-item label="赠送总额" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
 				</el-form-item>
                 <el-form-item label="充值总额" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
 				</el-form-item>
 				<el-form-item label="提现总额" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
 				</el-form-item>
                 <el-form-item label="账户余额" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
 				</el-form-item>
                 <el-form-item label="总结算" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
 				</el-form-item>
 				<el-form-item label="注册时间" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
