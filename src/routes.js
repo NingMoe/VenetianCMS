@@ -31,14 +31,10 @@ const lottery4 = r => require.ensure([], () => r(require(开奖数据+'4.vue')),
 const lottery5 = r => require.ensure([], () => r(require(开奖数据+'5.vue')), 'lottery-gather')
 const lottery6 = r => require.ensure([], () => r(require(开奖数据+'6.vue')), 'lottery-gather')
 const lottery7 = r => require.ensure([], () => r(require(开奖数据+'7.vue')), 'lottery-gather')
-const lottery8 = r => require.ensure([], () => r(require(开奖数据+'8.vue')), 'lottery-gather')
-const lottery9 = r => require.ensure([], () => r(require(开奖数据+'9.vue')), 'lottery-gather')
-const lottery10 = r => require.ensure([], () => r(require(开奖数据+'10.vue')), 'lottery-gather')
-const lottery11 = r => require.ensure([], () => r(require(开奖数据+'11.vue')), 'lottery-gather')
-const lottery12 = r => require.ensure([], () => r(require(开奖数据+'12.vue')), 'lottery-gather')
 const lottery_limit = r => require.ensure([], () => r(require(开奖数据+'lottery-limit.vue')), 'lottery-data')
 const lottery_test = r => require.ensure([], () => r(require(开奖数据+'lottery-test.vue')), 'lottery-data')
 const manual_lottery = r => require.ensure([], () => r(require(开奖数据+'manual-lottery.vue')), 'lottery-data')
+const preset_manage = r => require.ensure([], () => r(require(开奖数据+'preset-manage.vue')), 'lottery-data')
 
 //玩法设置
 const play_setting = r => require.ensure([], () => r(require(玩法设置+'index.vue')), 'play-setting')
@@ -129,7 +125,7 @@ let routes = [
             { path: '/business-flow/withdraw-request', component: withdraw_request, name: '提现请求' },
             { path: '/business-flow/recharge_record', component: recharge_record, name: '充值记录' },
             { path: '/business-flow/general_bets', component: general_bets, name: '普通投注' },
-            { path: '/business-flow/account_details', component: account_details, name: '帐变明细' },
+            { path: '/business-flow/account_details', component: account_details, name: '账变明细' },
         ]
     },
     {
@@ -140,18 +136,14 @@ let routes = [
         children: [
             { path: '/lottery-gather/lottery1', component: lottery1, name: '重庆时时彩' },
             { path: '/lottery-gather/lottery2', component: lottery2, name: '香港六合彩' },
-            { path: '/lottery-gather/lottery3', component: lottery3, name: '广西快三' },
-            { path: '/lottery-gather/lottery4', component: lottery4, name: '时时快三' },
-            { path: '/lottery-gather/lottery5', component: lottery5, name: '北京PK拾' },
-            { path: '/lottery-gather/lottery6', component: lottery6, name: '幸运农场' },
-            { path: '/lottery-gather/lottery7', component: lottery7, name: '澳门2分彩' },
-            { path: '/lottery-gather/lottery8', component: lottery8, name: '急速六合彩' },
-            { path: '/lottery-gather/lottery9', component: lottery9, name: '香港时时彩' },
-            { path: '/lottery-gather/lottery10', component: lottery10, name: '暴力摩托' },
-            { path: '/lottery-gather/lottery11', component: lottery11, name: '澳门快三' },
-            { path: '/lottery-gather/lottery12', component: lottery12, name: '吉林快三' },
+            { path: '/lottery-gather/lottery3', component: lottery3, name: '北京PK拾' },
+            { path: '/lottery-gather/lottery4', component: lottery4, name: '幸运农场' },
+            { path: '/lottery-gather/lottery5', component: lottery5, name: '江苏骰宝' },                        
+            { path: '/lottery-gather/lottery6', component: lottery6, name: '澳门2分彩' },
+            { path: '/lottery-gather/lottery7', component: lottery7, name: '急速六合一' },
             { path: '/lottery-gather/lottery-limit', component: lottery_limit, name: '限额设置' },
             { path: '/lottery-gather/lottery-test', component: lottery_test, name: '开奖检测' },
+            { path: '/lottery-gather/preset-manage', component: preset_manage, name: '预设管理模式' },                        
             { path: '/lottery-gather/manual-lottery', component: manual_lottery, name: '手动开奖' },
         ]
     },

@@ -61,7 +61,7 @@
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
-			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="15" :total="total" style="float:right;">
+			<el-pagination layout="total,prev, pager, next" @current-change="handleCurrentChange" :page-size="15" :total="total" style="float:right;">
 			</el-pagination>
 		</el-col>
 

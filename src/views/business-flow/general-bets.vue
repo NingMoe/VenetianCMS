@@ -17,13 +17,13 @@
                 </el-form-item>
                 <el-form-item label="彩种类型">
                     <el-select v-model="filters.status" placeholder="请选择类型">
-                    <el-option label="重庆时时彩" value="cqssc"></el-option>
-                    <el-option label="香港六合彩" value="xglhc"></el-option>
-                    <el-option label="北京PK拾" value="bjpks"></el-option>
-                    <el-option label="幸运农场" value="xync"></el-option>
-                    <el-option label="江苏骰宝" value="jssb"></el-option>
-                    <el-option label="澳门2分彩" value="am2fc"></el-option>
-                    <el-option label="急速六合一" value="jslhy"></el-option>
+                        <el-option label="重庆时时彩" value="cqssc"></el-option>
+                        <el-option label="香港六合彩" value="xglhc"></el-option>
+                        <el-option label="北京PK拾" value="bjpks"></el-option>
+                        <el-option label="幸运农场" value="xync"></el-option>
+                        <el-option label="江苏骰宝" value="jssb"></el-option>
+                        <el-option label="澳门2分彩" value="am2fc"></el-option>
+                        <el-option label="急速六合一" value="jslhy"></el-option>
                     </el-select>
                 </el-form-item>
 
@@ -73,12 +73,11 @@
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
-			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="15" :total="total" style="float:right;">
+			<el-pagination layout="total,prev, pager, next" @current-change="handleCurrentChange" :page-size="15" :total="total" style="float:right;">
 			</el-pagination>
 		</el-col>
 
-		<!--编辑界面-->
+		<!--查看-->
 		<el-dialog title="投注详情" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="100px"  ref="editForm" :inline="true">
 				<el-form-item label="彩种" >
@@ -128,34 +127,6 @@
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="editFormVisible = false">关闭</el-button>
-			</div>
-		</el-dialog>
-
-		<!--新增界面-->
-		<el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false">
-			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="姓名" prop="name">
-					<el-input v-model="addForm.name" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="性别">
-					<el-radio-group v-model="addForm.sex">
-						<el-radio class="radio" :label="1">男</el-radio>
-						<el-radio class="radio" :label="0">女</el-radio>
-					</el-radio-group>
-				</el-form-item>
-				<el-form-item label="年龄">
-					<el-input-number v-model="addForm.age" :min="0" :max="200"></el-input-number>
-				</el-form-item>
-				<el-form-item label="生日">
-					<el-date-picker type="date" placeholder="选择日期" v-model="addForm.birth"></el-date-picker>
-				</el-form-item>
-				<el-form-item label="地址">
-					<el-input type="textarea" v-model="addForm.addr"></el-input>
-				</el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click.native="addFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
 			</div>
 		</el-dialog>
 	</section>
@@ -275,76 +246,45 @@
 					addr: ''
 				};
 			},
-			//编辑
+			//撤单
 			handleRecall: function () {
-				this.$refs.editForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.editLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.editForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							editUser(para).then((res) => {
-								this.editLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['editForm'].resetFields();
-								this.editFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
+				this.$confirm('您确定要撤销此单吗?', '警告', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '成功撤销!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消撤销'
+                    });          
+                });
             },
+            //冻结
             handleFreeze: function () {
-				this.$refs.editForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.editLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.editForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							editUser(para).then((res) => {
-								this.editLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['editForm'].resetFields();
-								this.editFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
+				this.$confirm('您确定要冻结此用户吗?', '警告', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '成功冻结!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消冻结'
+                    });          
+                });
             },
 			//新增
 			addSubmit: function () {
-				this.$refs.addForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.addLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.addForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							addUser(para).then((res) => {
-								this.addLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['addForm'].resetFields();
-								this.addFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
+				
 			},
 			selsChange: function (sels) {
 				this.sels = sels;
