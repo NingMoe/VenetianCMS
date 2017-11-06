@@ -3,38 +3,70 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
-				<el-form-item>
-					<el-input v-model="filters.name" placeholder="姓名"></el-input>
+				<el-form-item label="用户名">
+					<el-input v-model="filters.name" placeholder="用户名"></el-input>
 				</el-form-item>
+                <el-form-item label="日期范围">
+                    <el-date-picker
+                        v-model="filters.LastLoginTime"
+                        type="daterange"
+                        align="right"
+                        placeholder="选择日期范围"
+                        :picker-options="pickerOptions2">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="彩种类型">
+                    <el-select v-model="filters.status" placeholder="请选择类型">
+                    <el-option label="重庆时时彩" value="cqssc"></el-option>
+                    <el-option label="香港六合彩" value="xglhc"></el-option>
+                    <el-option label="北京PK拾" value="bjpks"></el-option>
+                    <el-option label="幸运农场" value="xync"></el-option>
+                    <el-option label="江苏骰宝" value="jssb"></el-option>
+                    <el-option label="澳门2分彩" value="am2fc"></el-option>
+                    <el-option label="急速六合一" value="jslhy"></el-option>
+                    </el-select>
+                </el-form-item>
+
+
+
 				<el-form-item>
 					<el-button type="primary" v-on:click="getUsers">查询</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="handleAdd">新增</el-button>
+					<el-button @click="handleAdd">重置</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
 
 		<!--列表-->
 		<el-table :data="users" highlight-current-row v-loading="listLoading" element-loading-text="拼命加载中..." @selection-change="selsChange" style="width: 100%;">
-			<el-table-column type="selection" width="55">
+			<el-table-column prop="" label="单号" width="120" sortable align="center">
 			</el-table-column>
-			<el-table-column type="index" width="60">
+			<el-table-column prop="" label="期号" width="100" :formatter="formatSex" sortable align="center">
 			</el-table-column>
-			<el-table-column prop="name" label="姓名" width="120" sortable>
+			<el-table-column prop="name" label="用户名" width="100" align="center">
 			</el-table-column>
-			<el-table-column prop="sex" label="性别" width="100" :formatter="formatSex" sortable>
+			<el-table-column prop="" label="投注时间" width="120" sortable align="center">
 			</el-table-column>
-			<el-table-column prop="age" label="年龄" width="100" sortable>
+			<el-table-column prop="" label="彩种" min-width="80" align="center">
 			</el-table-column>
-			<el-table-column prop="birth" label="生日" width="120" sortable>
+            <el-table-column prop="" label="玩法" min-width="80" align="center">
 			</el-table-column>
-			<el-table-column prop="addr" label="地址" min-width="180" sortable>
+            <el-table-column prop="" label="倍数" min-width="80" sortable align="center">
 			</el-table-column>
-			<el-table-column label="操作" width="150">
+            <el-table-column prop="" label="注数" min-width="80" sortable align="center">
+			</el-table-column>
+            <el-table-column prop="" label="投注号码" min-width="80" sortable align="center">
+			</el-table-column>
+            <el-table-column prop="" label="投注金额" min-width="80" sortable align="center">
+			</el-table-column>
+            <el-table-column prop="" label="中奖金额" min-width="80" sortable align="center">
+			</el-table-column>
+			<el-table-column label="操作" min-width="150" align="center">
 				<template scope="scope">
-					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+					<el-button type="primary" size="small" @click="handleEdit(scope.$index, scope.row)">查看</el-button>
+                    <el-button type="warning" size="small" @click="handleRecall()">撤单</el-button>
+					<el-button type="danger" size="small" @click="handleFreeze()">冻结</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -47,30 +79,55 @@
 		</el-col>
 
 		<!--编辑界面-->
-		<el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
-			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="姓名" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
+		<el-dialog title="投注详情" v-model="editFormVisible" :close-on-click-modal="false">
+			<el-form :model="editForm" label-width="100px"  ref="editForm" :inline="true">
+				<el-form-item label="彩种" >
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
 				</el-form-item>
-				<el-form-item label="性别">
-					<el-radio-group v-model="editForm.sex">
-						<el-radio class="radio" :label="1">男</el-radio>
-						<el-radio class="radio" :label="0">女</el-radio>
-					</el-radio-group>
+                <el-form-item label="玩法" >
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
 				</el-form-item>
-				<el-form-item label="年龄">
-					<el-input-number v-model="editForm.age" :min="0" :max="200"></el-input-number>
+				<el-form-item label="投注人" >
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
 				</el-form-item>
-				<el-form-item label="生日">
-					<el-date-picker type="date" placeholder="选择日期" v-model="editForm.birth"></el-date-picker>
+                <el-form-item label="投注人状态" >
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
 				</el-form-item>
-				<el-form-item label="地址">
-					<el-input type="textarea" v-model="editForm.addr"></el-input>
+				<el-form-item label="期号" >
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
+				</el-form-item>
+                <el-form-item label="单号" >
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
+				</el-form-item>
+				<el-form-item label="时间" >
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
+				</el-form-item>
+                <el-form-item label="状态" >
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
+				</el-form-item>
+                <div>
+                    <el-form-item label="开奖号码" >
+					    
+				    </el-form-item> 
+                </div>
+				<div>
+                    <el-form-item label="投注号码" >
+					    
+				    </el-form-item>
+                </div>
+                
+				<el-form-item label="注数" >
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
+				</el-form-item>
+                <el-form-item label="倍数" >
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
+				</el-form-item>
+                <el-form-item label="投注金额" >
+					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
-				<el-button @click.native="editFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
+				<el-button @click.native="editFormVisible = false">关闭</el-button>
 			</div>
 		</el-dialog>
 
@@ -219,7 +276,7 @@
 				};
 			},
 			//编辑
-			editSubmit: function () {
+			handleRecall: function () {
 				this.$refs.editForm.validate((valid) => {
 					if (valid) {
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
@@ -241,7 +298,30 @@
 						});
 					}
 				});
-			},
+            },
+            handleFreeze: function () {
+				this.$refs.editForm.validate((valid) => {
+					if (valid) {
+						this.$confirm('确认提交吗？', '提示', {}).then(() => {
+							this.editLoading = true;
+							//NProgress.start();
+							let para = Object.assign({}, this.editForm);
+							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
+							editUser(para).then((res) => {
+								this.editLoading = false;
+								//NProgress.done();
+								this.$message({
+									message: '提交成功',
+									type: 'success'
+								});
+								this.$refs['editForm'].resetFields();
+								this.editFormVisible = false;
+								this.getUsers();
+							});
+						});
+					}
+				});
+            },
 			//新增
 			addSubmit: function () {
 				this.$refs.addForm.validate((valid) => {
