@@ -1,33 +1,40 @@
 <template>
-  <div>
-    <h1>vuex 测试</h1>
-    Clicked: {{ getCount }} times
-    <button @click="increment">+</button>
-    <button @click="decrement">-</button>
-  </div>
+	<section>
+        <div id="toolbar"></div>
+		<div id="editor">
+           
+        </div>
+	</section>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
-  import { mapActions } from 'vuex'
+	//import NProgress from 'nprogress'
+	import { getvUserListPage, removeUser, batchRemoveUser, editUser, addUser ,getvUserList } from '../../api/api';
+     
+	export default {
+		data() {
+			return {
+				
 
-  export default {
-    computed: {
-  	// 使用对象展开运算符将 getters 混入 computed 对象中
-    ...mapGetters([
-      'getCount'
-      // ...
-    ])
-    },
-    methods: {
-    ...mapActions([
-      'increment', // 映射 this.increment() 为 this.$store.dispatch('increment')
-      'decrement'
-    ])
-      //...mapActions({
-      //  add: 'increment' // 映射 this.add() 为 this.$store.dispatch('increment')
-      //})
-    }
-  }
+			}
+		},
+		methods: {
+			
+		},
+		mounted() {
+           var quill = new Quill('#editor', {
+               modules: {
+                    theme: 'snow'
+                }
+            });
+            console.log('生效')
+		}
+	}
 
 </script>
+
+<style scoped>
+    .toolbar{
+        padding: 0px;
+    }
+</style>
