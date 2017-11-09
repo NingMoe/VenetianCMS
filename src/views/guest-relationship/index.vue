@@ -3,104 +3,55 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
-				<el-form-item>
-					<el-input v-model="filters.name" placeholder="姓名"></el-input>
+				<el-form-item label="用户名">
+					<el-input v-model="filters.name" placeholder="用户名"></el-input>
 				</el-form-item>
+                <el-form-item label="日期范围">
+                    <el-date-picker
+                        v-model="filters.LastLoginTime"
+                        type="daterange"
+                        align="right"
+                        placeholder="选择日期范围"
+                        :picker-options="pickerOptions2">
+                    </el-date-picker>
+                </el-form-item>
 				<el-form-item>
 					<el-button type="primary" v-on:click="getUsers">查询</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="handleAdd">新增</el-button>
+					<el-button @click="handleAdd">重置</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
 
 		<!--列表-->
 		<el-table :data="users" highlight-current-row v-loading="listLoading" element-loading-text="拼命加载中..." @selection-change="selsChange" style="width: 100%;">
-			<el-table-column type="selection" width="55">
+			<el-table-column prop="name" label="用户名" min-width="120" sortable align="center">
 			</el-table-column>
-			<el-table-column type="index" width="60">
+			<el-table-column prop="sex" label="申请时间" min-width="100" :formatter="formatSex" align="center">
 			</el-table-column>
-			<el-table-column prop="name" label="姓名" width="120" sortable>
+			<el-table-column prop="age" label="反水类型" min-width="100" sortable align="center">
 			</el-table-column>
-			<el-table-column prop="sex" label="性别" width="100" :formatter="formatSex" sortable>
+			<el-table-column prop="birth" label="返现周期" min-width="120" align="center">
 			</el-table-column>
-			<el-table-column prop="age" label="年龄" width="100" sortable>
+			<el-table-column prop="addr" label="申请说明" min-width="180" sortable align="center">
 			</el-table-column>
-			<el-table-column prop="birth" label="生日" width="120" sortable>
+            <el-table-column prop="addr" label="通过备注" min-width="180" align="center">
 			</el-table-column>
-			<el-table-column prop="addr" label="地址" min-width="180" sortable>
-			</el-table-column>
-			<el-table-column label="操作" width="150">
+			<el-table-column label="操作" width="150" align="center">
 				<template scope="scope">
-					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+					<el-button type="success" size="small" @click="handleAdopt()">通过</el-button>
+					<el-button type="danger" size="small" @click="handleReject()">驳回</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
-			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="15" :total="total" style="float:right;">
+			<el-pagination layout="total,prev, pager, next" @current-change="handleCurrentChange" :page-size="15" :total="total" style="float:right;">
 			</el-pagination>
 		</el-col>
 
-		<!--编辑界面-->
-		<el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
-			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="姓名" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="性别">
-					<el-radio-group v-model="editForm.sex">
-						<el-radio class="radio" :label="1">男</el-radio>
-						<el-radio class="radio" :label="0">女</el-radio>
-					</el-radio-group>
-				</el-form-item>
-				<el-form-item label="年龄">
-					<el-input-number v-model="editForm.age" :min="0" :max="200"></el-input-number>
-				</el-form-item>
-				<el-form-item label="生日">
-					<el-date-picker type="date" placeholder="选择日期" v-model="editForm.birth"></el-date-picker>
-				</el-form-item>
-				<el-form-item label="地址">
-					<el-input type="textarea" v-model="editForm.addr"></el-input>
-				</el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click.native="editFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
-			</div>
-		</el-dialog>
-
-		<!--新增界面-->
-		<el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false">
-			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="姓名" prop="name">
-					<el-input v-model="addForm.name" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="性别">
-					<el-radio-group v-model="addForm.sex">
-						<el-radio class="radio" :label="1">男</el-radio>
-						<el-radio class="radio" :label="0">女</el-radio>
-					</el-radio-group>
-				</el-form-item>
-				<el-form-item label="年龄">
-					<el-input-number v-model="addForm.age" :min="0" :max="200"></el-input-number>
-				</el-form-item>
-				<el-form-item label="生日">
-					<el-date-picker type="date" placeholder="选择日期" v-model="addForm.birth"></el-date-picker>
-				</el-form-item>
-				<el-form-item label="地址">
-					<el-input type="textarea" v-model="addForm.addr"></el-input>
-				</el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click.native="addFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
-			</div>
-		</el-dialog>
 	</section>
 </template>
 
@@ -113,7 +64,8 @@
 		data() {
 			return {
 				filters: {
-					name: ''
+					name: '',
+                    status:'whole'
 				},
 				users: [],
 				total: 0,
@@ -181,42 +133,44 @@
                     console.log(this.users)
                 });
 			},
-			//删除
-			handleDel: function (index, row) {
-				this.$confirm('确认删除该记录吗?', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { id: row.id };
-					removeUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
-				}).catch(() => {
-
-				});
+			//驳回
+			handleReject: function (index, row) {
+				this.$prompt('请输入驳回原因', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    this.$message({
+                        type: 'success',
+                        message: '以成功驳回请求'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消驳回操作'
+                    });       
+                });
 			},
-			//显示编辑界面
-			handleEdit: function (index, row) {
-				this.editFormVisible = true;
-				this.editForm = Object.assign({}, row);
+			//通过
+			handleAdopt: function (index, row) {
+				this.$confirm('确定通过?', '警告', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '请求以通过!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消操作'
+                    });          
+                });
 			},
 			//显示新增界面
 			handleAdd: function () {
-				this.addFormVisible = true;
-				this.addForm = {
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				};
+                
 			},
 			//编辑
 			editSubmit: function () {

@@ -1,46 +1,37 @@
 <template>
-	<el-form ref="form" :model="form" label-width="80px" @submit.prevent="onSubmit" style="margin:20px;width:60%;min-width:600px;">
-		<el-form-item label="活动名称">
-			<el-input v-model="form.name"></el-input>
+	<el-form ref="form" :model="account" label-width="100px" @submit.prevent="onSubmit" style="margin:0 auto;width:350px;min-width:350px;margin-top:20px;">
+        <el-form-item label="网站状态" >
+			<el-tooltip :content="'当前状态: ' + status" placement="top">
+                <el-switch
+                    v-model="status"
+                    on-color="#13ce66"
+                    off-color="#ff4949"
+                    on-value="开"
+                    off-value="关">
+                </el-switch>
+            </el-tooltip>
 		</el-form-item>
-		<el-form-item label="活动区域">
-			<el-select v-model="form.region" placeholder="请选择活动区域">
-				<el-option label="区域一" value="shanghai"></el-option>
-				<el-option label="区域二" value="beijing"></el-option>
-			</el-select>
+         <el-form-item label="网站模式" >
+			<template>
+                <el-radio class="radio" v-model="radio" label="1">盈利模式</el-radio>
+                <el-radio class="radio" v-model="radio" label="2">预设模式</el-radio>
+            </template>
 		</el-form-item>
-		<el-form-item label="活动时间">
-			<el-col :span="11">
-				<el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
-			</el-col>
-			<el-col class="line" :span="2">-</el-col>
-			<el-col :span="11">
-				<el-time-picker type="fixed-time" placeholder="选择时间" v-model="form.date2" style="width: 100%;"></el-time-picker>
-			</el-col>
+         <el-form-item label="预设开奖条数" >
+			 <el-input-number v-model="num1" @change="handleChange" :min="1" :max="10"></el-input-number>
+             <el-button type="primary">更新</el-button>
 		</el-form-item>
-		<el-form-item label="即时配送">
-			<el-switch on-text="" off-text="" v-model="form.delivery"></el-switch>
-		</el-form-item>
-		<el-form-item label="活动性质">
-			<el-checkbox-group v-model="form.type">
-				<el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-				<el-checkbox label="地推活动" name="type"></el-checkbox>
-				<el-checkbox label="线下主题活动" name="type"></el-checkbox>
-				<el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-			</el-checkbox-group>
-		</el-form-item>
-		<el-form-item label="特殊资源">
-			<el-radio-group v-model="form.resource">
-				<el-radio label="线上品牌商赞助"></el-radio>
-				<el-radio label="线下场地免费"></el-radio>
-			</el-radio-group>
-		</el-form-item>
-		<el-form-item label="活动形式">
-			<el-input type="textarea" v-model="form.desc"></el-input>
-		</el-form-item>
-		<el-form-item>
-			<el-button type="primary">立即创建</el-button>
-			<el-button @click.native.prevent>取消</el-button>
+        <el-form-item label="清理数据" >
+            <el-tooltip placement="top">
+                <div slot="content">清理<span style="color:#FF4949;">{{input2}}</span>天投注、开奖历史、返奖等除了反水的一切用户活动数据<br/>第二行信息</div>
+                <el-input
+                placeholder="请输入天数"
+                icon="search"
+                v-model="input2"
+                :on-icon-click="handleIconClick">
+                <el-button slot="append" icon="delete" ></el-button>
+                </el-input>
+            </el-tooltip>
 		</el-form-item>
 	</el-form>
 </template>
@@ -49,16 +40,13 @@
 	export default {
 		data() {
 			return {
-				form: {
-					name: '',
-					region: '',
-					date1: '',
-					date2: '',
-					delivery: false,
-					type: [],
-					resource: '',
-					desc: ''
-				}
+				account: {
+					name:"",
+                },
+                status:'',
+                radio:'1',
+                num1:'',
+                input2:'0'
 			}
 		},
 		methods: {

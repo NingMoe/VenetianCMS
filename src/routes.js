@@ -31,6 +31,12 @@ const lottery4 = r => require.ensure([], () => r(require(开奖数据+'4.vue')),
 const lottery5 = r => require.ensure([], () => r(require(开奖数据+'5.vue')), 'lottery-gather')
 const lottery6 = r => require.ensure([], () => r(require(开奖数据+'6.vue')), 'lottery-gather')
 const lottery7 = r => require.ensure([], () => r(require(开奖数据+'7.vue')), 'lottery-gather')
+const lottery8 = r => require.ensure([], () => r(require(开奖数据+'8.vue')), 'lottery-gather')
+const lottery9 = r => require.ensure([], () => r(require(开奖数据+'9.vue')), 'lottery-gather')
+const lottery10 = r => require.ensure([], () => r(require(开奖数据+'10.vue')), 'lottery-gather')
+const lottery11 = r => require.ensure([], () => r(require(开奖数据+'11.vue')), 'lottery-gather')
+const lottery12 = r => require.ensure([], () => r(require(开奖数据+'12.vue')), 'lottery-gather')
+const lottery13 = r => require.ensure([], () => r(require(开奖数据+'13.vue')), 'lottery-gather')
 const lottery_limit = r => require.ensure([], () => r(require(开奖数据+'lottery-limit.vue')), 'lottery-data')
 const lottery_test = r => require.ensure([], () => r(require(开奖数据+'lottery-test.vue')), 'lottery-data')
 const manual_lottery = r => require.ensure([], () => r(require(开奖数据+'manual-lottery.vue')), 'lottery-data')
@@ -44,6 +50,7 @@ const set_rate = r => require.ensure([], () => r(require(玩法设置+'set-rate.
 const survey = r => require.ensure([], () => r(require(数据统计+'survey.vue')), 'data-statistics')
 const comprehensive = r => require.ensure([], () => r(require(数据统计+'comprehensive.vue')), 'data-statistics')
 const risk = r => require.ensure([], () => r(require(数据统计+'risk.vue')), 'data-statistics')
+const WinOrLoseRanking = r => require.ensure([], () => r(require(数据统计+'WinOrLoseRanking.vue')), 'data-statistics')
 
 //用户管理
 const add_vip = r => require.ensure([], () => r(require(用户管理+'add-vip.vue')), 'data-statistics')
@@ -136,11 +143,17 @@ let routes = [
         children: [
             { path: '/lottery-gather/lottery1', component: lottery1, name: '重庆时时彩' },
             { path: '/lottery-gather/lottery2', component: lottery2, name: '香港六合彩' },
-            { path: '/lottery-gather/lottery3', component: lottery3, name: '北京PK拾' },
-            { path: '/lottery-gather/lottery4', component: lottery4, name: '幸运农场' },
-            { path: '/lottery-gather/lottery5', component: lottery5, name: '江苏骰宝' },                        
-            { path: '/lottery-gather/lottery6', component: lottery6, name: '澳门2分彩' },
-            { path: '/lottery-gather/lottery7', component: lottery7, name: '急速六合一' },
+            { path: '/lottery-gather/lottery3', component: lottery3, name: '广西快三' },
+            { path: '/lottery-gather/lottery4', component: lottery4, name: '时时快三' },
+            { path: '/lottery-gather/lottery5', component: lottery5, name: '北京PK拾' },
+            { path: '/lottery-gather/lottery6', component: lottery6, name: '幸运农场' },
+            { path: '/lottery-gather/lottery7', component: lottery7, name: '江苏骰宝' },                        
+            { path: '/lottery-gather/lottery8', component: lottery8, name: '澳门2分彩' },
+            { path: '/lottery-gather/lottery9', component: lottery9, name: '急速六合一' },
+            { path: '/lottery-gather/lottery10', component: lottery10, name: '香港时时彩' },
+            { path: '/lottery-gather/lottery11', component: lottery11, name: '暴力摩托' },
+            { path: '/lottery-gather/lottery12', component: lottery12, name: '澳门快三' },
+            { path: '/lottery-gather/lottery13', component: lottery13, name: '吉林快三' },
             { path: '/lottery-gather/lottery-limit', component: lottery_limit, name: '限额设置' },
             { path: '/lottery-gather/lottery-test', component: lottery_test, name: '开奖检测' },
             { path: '/lottery-gather/preset-manage', component: preset_manage, name: '预设管理模式' },                        
@@ -166,6 +179,7 @@ let routes = [
         children: [
             { path: '/data-statistics/survey', component: survey, name: '统计概况' },
             { path: '/data-statistics/comprehensive', component: comprehensive, name: '综合统计'},
+            { path: '/data-statistics/winorloseranking', component: WinOrLoseRanking, name: '输赢排行'},            
             { path: '/data-statistics/risk', component: risk, name: '投注内容排行'},
         ]
     },

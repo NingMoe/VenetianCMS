@@ -3,39 +3,35 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
-				<el-form-item>
-					<el-input v-model="filters.name" placeholder="姓名"></el-input>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="handleAdd">新增</el-button>
-				</el-form-item>
+				<el-form-item label="彩票种类" prop="issue">
+                    <el-select v-model="filters.lotteryClass" placeholder="请选择彩种类型">
+                    <el-option label="重庆时时彩" value="cqssc"></el-option>
+                    <el-option label="香港六合彩" value="xglhc"></el-option>
+                    <el-option label="北京PK拾" value="bjpks"></el-option>
+                    <el-option label="幸运农场" value="xync"></el-option>
+                    <el-option label="江苏骰宝" value="jstb"></el-option>
+                    <el-option label="澳门2分彩" value="am2fc"></el-option>
+                    <el-option label="急速六合一" value="jslhy"></el-option>
+                    </el-select>
+                </el-form-item>
 			</el-form>
 		</el-col>
 
 		<!--列表-->
 		<el-table :data="users" highlight-current-row v-loading="listLoading" element-loading-text="拼命加载中..." @selection-change="selsChange" style="width: 100%;">
-			<el-table-column type="selection" width="55">
+			<el-table-column prop="name" label="序号" width="120" sortable>
 			</el-table-column>
-			<el-table-column type="index" width="60">
+			<el-table-column prop="sex" label="玩法" width="100" :formatter="formatSex" sortable>
 			</el-table-column>
-			<el-table-column prop="name" label="姓名" width="120" sortable>
+			<el-table-column prop="age" label="玩法节点" width="100" sortable>
 			</el-table-column>
-			<el-table-column prop="sex" label="性别" width="100" :formatter="formatSex" sortable>
+			<el-table-column prop="birth" label="投注内容" width="120" sortable>
 			</el-table-column>
-			<el-table-column prop="age" label="年龄" width="100" sortable>
+			<el-table-column prop="addr" label="投注数量" min-width="180" sortable>
 			</el-table-column>
-			<el-table-column prop="birth" label="生日" width="120" sortable>
+            <el-table-column prop="addr" label="风险系数" min-width="180" sortable>
 			</el-table-column>
-			<el-table-column prop="addr" label="地址" min-width="180" sortable>
-			</el-table-column>
-			<el-table-column label="操作" width="150">
-				<template scope="scope">
-					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
-				</template>
+            <el-table-column prop="addr" label="统计时间" min-width="180" sortable>
 			</el-table-column>
 		</el-table>
 

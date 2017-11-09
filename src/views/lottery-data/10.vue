@@ -3,36 +3,25 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
-                
-                <div>
-                    <el-form-item label="日期范围">
-                        <el-date-picker
-                            v-model="filters.LastLoginTime"
-                            type="daterange"
-                            align="right"
-                            placeholder="选择日期范围"
-                            :picker-options="pickerOptions">
-                        </el-date-picker>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" v-on:click="getData">查询</el-button>
-                    </el-form-item>
-                </div>
-                <div>
-                    <el-form-item label="反水类型" prop="issue">
-                        <el-select v-model="filters.lotteryClass" placeholder="请选择彩种类型">
-                        <el-option label="流水返现" value="am2fc"></el-option>
-                        <el-option label="输赢返现" value="jslhy"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="反水时间选择" prop="issue">
-                        <el-select v-model="filters.lotteryClass" placeholder="请选择彩种类型">
-                        <el-option label="每日" value="am2fc"></el-option>
-                        <el-option label="每周" value="jslhy"></el-option>
-                        <el-option label="每月" value="jslhy"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </div>
+				<el-form-item label="期数">
+					<el-input v-model="filters.name" placeholder="请输入期数"></el-input>
+				</el-form-item>
+                <el-form-item label="日期范围">
+                    <el-date-picker
+                        v-model="filters.LastLoginTime"
+                        type="daterange"
+                        align="right"
+                        placeholder="选择日期范围"
+                        :picker-options="pickerOptions">
+                    </el-date-picker>
+                </el-form-item>
+
+				<el-form-item>
+					<el-button type="primary" v-on:click="getData">查询</el-button>
+				</el-form-item>
+				<el-form-item>
+					<el-button @click="resetting">重置</el-button>
+				</el-form-item>
 			</el-form>
 		</el-col>
 		<!--列表-->
