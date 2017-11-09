@@ -1,19 +1,26 @@
 <template>
     <section>
-        <el-form ref="form" :model="form" label-width="80px" @submit.prevent="onSubmit" style="margin:20px;width:60%;min-width:600px;">
-            <el-form-item label="彩种类型">
-                <el-select v-model="form.lotteryClass" placeholder="请选择活动区域">
-                    <el-option label="重庆时时彩" value="cqssc"></el-option>
-                    <el-option label="香港六合彩" value="xglhc"></el-option>
-                    <el-option label="北京PK拾" value="bjpks"></el-option>
-                    <el-option label="幸运农场" value="xync"></el-option>
-                    <el-option label="江苏骰宝" value="jstb"></el-option>
-                    <el-option label="澳门2分彩" value="am2fc"></el-option>
-                    <el-option label="急速六合一" value="jslhy"></el-option>
-                </el-select>
-            </el-form-item>
+        <div style="overflow: hidden;padding: 20px;" class="tool-box">
+            <el-form ref="form" :model="form" label-width="80px" @submit.prevent="onSubmit" style="width:60%;min-width:600px;float:left;">
+                <el-form-item label="彩种类型">
+                    <el-select v-model="form.lotteryClass" placeholder="请选择活动区域">
+                        <el-option label="重庆时时彩" value="cqssc"></el-option>
+                        <el-option label="香港六合彩" value="xglhc"></el-option>
+                        <el-option label="北京PK拾" value="bjpks"></el-option>
+                        <el-option label="幸运农场" value="xync"></el-option>
+                        <el-option label="江苏骰宝" value="jstb"></el-option>
+                        <el-option label="澳门2分彩" value="am2fc"></el-option>
+                        <el-option label="急速六合一" value="jslhy"></el-option>
+                    </el-select>
+                </el-form-item>
             
-        </el-form>
+            </el-form>
+            <div style="float:right;">
+                <el-button type="primary" onclick="location.href='#/play-setting/set-rate'">动态设置赔率</el-button>
+            </div>
+        </div>
+        
+        
         <div v-for="game in setGames" v-if="form.lotteryClass == game.nav" class="play-body name-body">
             <div class="games" v-for="items in game.item">
                 <div class="game-name">{{items.name}}</div>
@@ -42,9 +49,14 @@
     </section>
 </template>
 <style scoped lang="scss">
+.tool-box{
+    .el-form-item {
+        margin-bottom: 0px;
+    }
+}
 
 .play-body{
-
+    
     .games{
         text-align: center;
         background: #fff;
