@@ -217,11 +217,13 @@ export default {
       }
     },
     clearCache(){
-        this.$message({
-          showClose: true,
-          message: '清空成功',
-          type: 'success'
-        });
+        
+          this.$message({
+            message: '清除缓存成功',
+            type: 'success',
+            duration: '1500'
+          })
+        
     },
     selectTag(id) {}
   },

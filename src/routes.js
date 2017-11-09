@@ -81,15 +81,7 @@ const guest_relationship= r => require.ensure([], () => r(require(客户关系�
 //编辑
 const editor= r => require.ensure([], () => r(require(编辑+'index.vue')), 'editor')
 
-//测试
-const Table = r => require.ensure([], () => r(require('./views/test/Table.vue')), 'test')
-const user = r => require.ensure([], () => r(require('./views/test/user.vue')), 'test')
-const Form = r => require.ensure([], () => r(require('./views/test/Form.vue')), 'test')
-const Page4 = r => require.ensure([], () => r(require('./views/test/Page4.vue')), 'test')
-const Page5 = r => require.ensure([], () => r(require('./views/test/Page5.vue')), 'test')
-const Page6 = r => require.ensure([], () => r(require('./views/test/Page6.vue')), 'test')
-const echarts = r => require.ensure([], () => r(require('./views/test/echarts.vue')), 'test')
-const ttt = r => require.ensure([], () => r(require('./views/test/ttt.vue')), 'test')
+
 
 //用户管理
 const userlist = r => require.ensure([], () => r(require('./views/user-management/user-lists.vue')), 'user-management')
@@ -252,22 +244,6 @@ let routes = [
         iconCls: 'fa fa-edit',
         children: [
            { path: '/editor/index', component: editor, name: '公告编辑'}
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: '测试',
-        iconCls: 'fa fa-paper-plane',
-        children: [
-            { path: '/table', component: Table, name: 'Table' },
-            { path: '/form', component: Form, name: 'Form' },
-            { path: '/user', component: user, name: 'user' },
-            { path: '/page4', component: Page4, name: 'Page4' },
-            { path: '/page5', component: Page5, name: 'Page5' },
-            { path: '/page6', component: Page6, name: 'Page6' },
-            { path: '/echarts', component: echarts, name: 'echarts' },
-            { path: '/ttttttt', component: ttt, name: 'ttt' },
         ]
     },
     {
