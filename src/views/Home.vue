@@ -50,7 +50,7 @@
                 <el-col :span="4" class="userinfo">
                     
                     <el-dropdown trigger="hover">
-                        <span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
+                        <span class="el-dropdown-link userinfo-inner"><img src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80" /> {{sysUserName}}</span>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item>设置</el-dropdown-item>
                             <el-dropdown-item  @click.native="logout">退出登录</el-dropdown-item>
@@ -140,7 +140,7 @@ export default {
         //type: 'warning'
       })
         .then(() => {
-          sessionStorage.removeItem("user");
+          sessionStorage.removeItem("token");
           _this.$router.push("/login");
         })
         .catch(() => {});
@@ -229,9 +229,9 @@ export default {
   },
 
   mounted() {
-    var user = sessionStorage.getItem("user");
+    var user = sessionStorage.getItem("token");
     if (user) {
-      user = JSON.parse(user);
+      user = user;
       this.sysUserName = user.name || "";
       this.sysUserAvatar = user.avatar || "";
     }

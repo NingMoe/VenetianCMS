@@ -71,11 +71,19 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+	import { drawRequest } from '../../api/api';
 
 	export default {
 		data() {
 			return {
+                search: {
+                per_page: 10,
+                current_page: 1,
+                user_name: '',
+                interval: '',
+                code: '',
+                time: []
+                },
 				filters: {
 					name: '',
                     status:'whole'
@@ -103,21 +111,9 @@
 					addr: ''
 				},
 
-				addFormVisible: false,//新增界面是否显示
-				addLoading: false,
-				addFormRules: {
-					name: [
-						{ required: true, message: '请输入姓名', trigger: 'blur' }
-					]
-				},
-				//新增界面数据
-				addForm: {
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				}
+				pickerOptions2:{
+
+                }
 
 			}
 		},
@@ -132,18 +128,8 @@
 			},
 			//获取用户列表
 			getUsers() {
-				let para = {
-					page: this.page,
-					name: this.filters.name
-				};
-				this.listLoading = true;
-				//NProgress.start();
-				getUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.data.users;
-					this.listLoading = false;
-                    //NProgress.done();
-                    console.log(this.users)
+                drawRequest(this.search).then(res => {
+                    console.log(res);
                 });
 			},
 			//驳回

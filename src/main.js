@@ -14,8 +14,8 @@ import Vuex from 'vuex'
 //import 'nprogress/nprogress.css'
 import routes from './routes'
 //数据接口模拟
-import Mock from './mock'
-Mock.bootstrap();
+// import Mock from './mock'
+// Mock.bootstrap();
 
 import 'font-awesome/css/font-awesome.min.css'
 
@@ -33,9 +33,9 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   //NProgress.start();
   if (to.path == '/login') {
-    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('token');
   }
-  let user = JSON.parse(sessionStorage.getItem('user'));
+  let user = sessionStorage.getItem('token');
   if (!user && to.path != '/login') {
     next({ path: '/login' })
   } else {
