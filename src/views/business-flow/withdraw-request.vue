@@ -37,7 +37,7 @@
 
 		<!--列表-->
 		<el-table :data="data" highlight-current-row element-loading-text="拼命加载中..." style="width: 100%;">
-			<el-table-column prop="user_name" label="用户名" min-width="120" sortable align="center">
+			<el-table-column prop="user_name" label="用户名" min-width="120" align="center">
 			</el-table-column>
 			<el-table-column label="上级关系" min-width="200" align="center">
         <template scope="scope">
@@ -48,11 +48,11 @@
           </el-tooltip>
         </template>
 			</el-table-column>
-			<el-table-column prop="money" label="提现金额" min-width="100" sortable align="center">
+			<el-table-column prop="money" label="提现金额" min-width="100" align="center">
 			</el-table-column>
 			<el-table-column prop="bank_type" label="银行类型" min-width="120" align="center">
 			</el-table-column>
-			<el-table-column prop="bank_open_name" label="开户姓名" min-width="180" sortable align="center">
+			<el-table-column prop="bank_open_name" label="开户姓名" min-width="180"  align="center">
 			</el-table-column>
       <el-table-column label="开户账号" min-width="180" align="center">
         <template scope="scope">
@@ -63,7 +63,7 @@
           </el-tooltip>
         </template>
 			</el-table-column>
-      <el-table-column label="申请时间" min-width="180" sortable align="center">
+      <el-table-column label="申请时间" min-width="180" align="center">
         <template scope="scope">
         <el-tooltip class="item" effect="dark" v-bind:content="scope.row.create_time" placement="left">
           <section>
@@ -106,7 +106,8 @@
 <script>
 import util from "../../common/js/util";
 //import NProgress from 'nprogress'
-import { drawRequest } from "../../api/api";
+import { drawRequest, handleDrawRequest } from "../../api/api";
+
 
 export default {
   data() {
@@ -143,8 +144,11 @@ export default {
   },
   methods: {
     onReset(formName) {
-      this.$refs[formName].resetFields();
+      // this.$refs[formName].resetFields();
       this.search.interval = "";
+      this.search.code = "";
+      this.search.time = [];
+      this.search.user_name = "";
       this.onSearch();
     },
     pageChange(pageNo) {

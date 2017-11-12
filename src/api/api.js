@@ -88,3 +88,61 @@ export const requestLogin = params => {
 // form data data:{"user_name":"fff","interval":["2017-07-04","2017-07-04"],"limit":"0,5","hasPass":0,"code":"-1"}
 
 export const drawRequest = params => instance.get(`${base}/withdraw?${qs.stringify(params)}`).then(res => res.data)
+
+
+/**
+ * 驳回提现请求
+ * @param params
+ */
+export const handleRecharge = params => instance.put(`${base}/recharge/${params.id}?${qs.stringify(params)}`).then(res => res.data)
+
+/**
+ * 分页获取充值记录
+ * @param params 查询参数
+ */
+export const pagingRecharge = params => instance.get(`${base}/recharge?${qs.stringify(params)}`).then(res => res.data)
+
+/**
+ * 分页获取普通投注记录
+ * @param params params
+ */
+export const pagingGeneralBets = params => instance.get(`${base}/ticket?${qs.stringify(params)}`).then(res => res.data)
+
+/**
+ * 撤单
+ * @param params params
+ */
+export const withdrawals = params => instance.put(`${base}/ticket/${params.id}?${qs.stringify(params)}`).then(res => res.data)
+
+/**
+ * 更新用户状态
+ * @param params params
+ */
+export const updateUser = params => instance.put(`${base}/user/${params.id}/${params.status}`).then(res => res.data)
+
+/**
+ * 更新用户信息
+ * @param params params
+ */
+export const updateUserInfo = params => instance.put(`${base}/user/${params.id}?${qs.stringify(params)}`).then(res => res.data)
+
+
+/**
+ * 获取彩票种类信息
+ */
+export const lotteryTypes = params => instance.get(`${base}/lottery?${qs.stringify(params)}`).then(res => res.data)
+
+
+
+/**
+ * 分页获取账号详情
+ * @param params
+ */
+export const pagingAccountDetail = params => instance.get(`${base}/accountchange?${qs.stringify(params)}`).then(res => res.data)
+
+/**
+ * 获取账变类型
+ */
+export const accountChangeTypes = () => instance.get(`${base}/accountchangetype`).then(res => res.data)
+
+// console.log(accountChangeTypes());
