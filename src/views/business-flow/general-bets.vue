@@ -294,6 +294,7 @@
     mounted() {
       this.onSubmit();
       this.getLotteryTypes()
+      console.log(this.lotteryType)
     }
   }
 

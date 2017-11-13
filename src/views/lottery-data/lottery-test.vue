@@ -53,98 +53,90 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+	import { unusual, openUnusual } from '../../api/api';
 
 	export default {
-		data() {
-			return {
-				filters: {
-                    name: '',
-                    LastLoginTime: ''
-                },
-                value1:'',
-				users: [],
-				total: 0,
-				page: 1,
-                listLoading: false,
-
-                editFormVisible: false,//编辑界面是否显示
-				editLoading: false,
-				//编辑界面数据
-				editForm: {
-					id: 0,
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				},
-			}
-		},
-		methods: {
-			handleCurrentChange(val) {
-				this.page = val;
-				this.getData();
-			},
-			//获取用户列表
-			getData() {
-				let para = {
-					page: this.page,
-					name: this.filters.name
-				};
-				this.listLoading = true;
-				//NProgress.start();
-				getUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.data.users;
-					this.listLoading = false;
-                    //NProgress.done();
-                    console.log(this.users)
-                });
-                console.log(this.filters.LastLoginTime)
-            },
-
-            resetting(){
-                this.filters.name=''
-                this.getData();
-            },
-            pickerOptions(){
-
-            },
-            //显示编辑界面
-			handleEdit: function (index, row) {
-				this.editFormVisible = true;
-				this.editForm = Object.assign({}, row);
-			},
-			//编辑
-			editSubmit: function () {
-				this.$refs.editForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.editLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.editForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							editUser(para).then((res) => {
-								this.editLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['editForm'].resetFields();
-								this.editFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
-			},
-		},
-		mounted() {
-			this.getData();
-		}
-	}
+    data() {
+      var checkOpenNumber = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入开奖号码'));
+        } else if(/^[0-9+,]+$/.test(value)) {
+          callback();
+        } else {
+          callback(new Error('开奖号码只能是数字,+'));
+        }
+      };
+      var checkTime = (rule, value, callback) => {
+        if (!value || value == '') {
+          callback(new Error('请选择开奖时间'));
+        } else {
+          callback();
+        }
+      };
+      return {
+        rules: {
+          open_time: [
+            { validator: checkTime, trigger: 'blur' }
+          ],
+          open_number: [
+            { required: true, message: '请输入开奖号码', trigger: 'blur' },
+            { validator: checkOpenNumber, trigger: 'blur' }
+          ]
+        },
+        lotteryPlayTypes: [],
+        dialogFormVisible: false,
+        form: {
+          gid: '',
+          issue: '',
+          open_time: '',
+          open_number: ''
+        },
+        formLabelWidth: '80px'
+      }
+    },
+    mounted() {
+      this.loadData();
+    },
+    methods: {
+      loadData() {
+        unusual().then(res => this.lotteryPlayTypes = res);
+      },
+      open(index) {
+        if (this.$refs['form'])
+          this.$refs['form'].resetFields();
+        this.form = Object.assign({}, this.lotteryPlayTypes[index]);
+        this.dialogFormVisible = true;
+      },
+      submit() {
+        this.$refs['form'].validate((valid) => {
+          if (!valid) {
+            return
+          }
+          const date = new Date(this.form.open_time);
+          let fmt = 'yyyy-MM-dd hh:mm:ss';
+          var o = {   
+            "M+" : date.getMonth()+1,                 //月份   
+            "d+" : date.getDate(),                    //日   
+            "h+" : date.getHours(),                   //小时   
+            "m+" : date.getMinutes(),                 //分   
+            "s+" : date.getSeconds(),                 //秒   
+            "q+" : Math.floor((date.getMonth()+3)/3), //季度   
+            "S"  : date.getMilliseconds()             //毫秒   
+          };   
+          if(/(y+)/.test(fmt))   
+            fmt=fmt.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));   
+          for(var k in o)   
+            if(new RegExp("("+ k +")").test(fmt))   
+              fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length))); 
+          this.form.open_time = fmt;
+          openUnusual(this.form).then(() => {
+            this.loadData();
+            this.dialogFormVisible = false;
+          })
+        });
+      }
+    }
+  }
 
 </script>
 

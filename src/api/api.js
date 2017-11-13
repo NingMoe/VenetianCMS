@@ -146,3 +146,83 @@ export const pagingAccountDetail = params => instance.get(`${base}/accountchange
 export const accountChangeTypes = () => instance.get(`${base}/accountchangetype`).then(res => res.data)
 
 // console.log(accountChangeTypes());
+
+
+/**
+ * 异常开奖记录(时间已到未开奖的记录)
+ */
+export const unusual = () => instance.get(`${base}/lotteryresult/unusual`).then(res => res.data)
+
+
+/**
+ * 异常开奖记录开奖
+ * @param params params
+ */
+export const openUnusual = params => instance.post(`${base}/lotteryresult?${qs.stringify(params)}`).then(res => res.data)
+
+
+
+/**
+ * 获取赔率
+ */
+export const odds = params => instance.get(`${base}/odds?${qs.stringify(params)}`).then(res => res.data)
+
+/**
+ * 更新节点在线状态
+ * @param params params
+ */
+export const updateOddNodeOnline = params => instance.put(`${base}/node/${params.id}?${qs.stringify(params)}`).then(res => res.data)
+
+
+/**
+ * 更新赔率信息
+ * @param params params
+ */
+export const updateOddInfo = params => instance.put(`${base}/odds/${params.id}?${qs.stringify(params)}`).then(res => res.data)
+
+
+/**
+ * 获取系统动态赔率数据
+ */
+export const getGlobalSetting = () => instance.get(`${base}/config/odds`).then(res => res.data);
+
+/**
+ * 修改系统动态赔率数据
+ * @param params params
+ */
+export const updateGlobalSetting = params => instance.put(`${base}/config/odds?${qs.stringify(params)}`).then(res => res.data);
+
+
+/**
+ * 获取综合统计下级信息
+ * @param params params
+ */
+export const junior = params => instance.get(`${base}/team/${params.id}?${qs.stringify(params)}`).then(res => res.data)
+
+/**
+ * 分页获取综合统计信息
+ * @param params params
+ */
+export const pagingIntegrativeStatistics = params => instance.get(`${base}/financial?${qs.stringify(params)}`).then(res => res.data)
+
+/**
+ * 输赢排行
+ * @param params params
+ */
+export const getProfitDetails = params => instance.get(`${base}/dashboard/getProfitDetails?${qs.stringify(params)}`).then(res => res.data)
+
+
+
+
+/**
+ * 投注内容排行
+ * @param params params
+ */
+export const getRisk = params => instance.get(`${base}/risk?${qs.stringify(params)}`).then(res => res.data)
+
+
+/**
+ * 新增用户
+ * @param params params
+ */
+export const addUser = params => instance.post(`${base}/user?${qs.stringify(params)}`).then(res => res.data)
