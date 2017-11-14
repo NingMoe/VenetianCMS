@@ -114,17 +114,17 @@ export const pagingGeneralBets = params => instance.get(`${base}/ticket?${qs.str
  */
 export const withdrawals = params => instance.put(`${base}/ticket/${params.id}?${qs.stringify(params)}`).then(res => res.data)
 
-/**
- * 更新用户状态
- * @param params params
- */
-export const updateUser = params => instance.put(`${base}/user/${params.id}/${params.status}`).then(res => res.data)
+// /**
+//  * 更新用户状态
+//  * @param params params
+//  */
+// export const updateUser = params => instance.put(`${base}/user/${params.id}/${params.status}`).then(res => res.data)
 
-/**
- * 更新用户信息
- * @param params params
- */
-export const updateUserInfo = params => instance.put(`${base}/user/${params.id}?${qs.stringify(params)}`).then(res => res.data)
+// /**
+//  * 更新用户信息
+//  * @param params params
+//  */
+// export const updateUserInfo = params => instance.put(`${base}/user/${params.id}?${qs.stringify(params)}`).then(res => res.data)
 
 
 /**
@@ -226,3 +226,54 @@ export const getRisk = params => instance.get(`${base}/risk?${qs.stringify(param
  * @param params params
  */
 export const addUser = params => instance.post(`${base}/user?${qs.stringify(params)}`).then(res => res.data)
+
+
+
+
+
+/**
+ * 分页获取用户信息
+ * @param params
+ */
+export const pagingUser = params => instance.get(`${base}/user?${qs.stringify(params)}`).then(res => res.data)
+
+/**
+ * 获取单个用户统计信息
+ * @param params params
+ */
+export const integrativeStatistics = params => instance.get(`${base}/financial/${params.id}`).then(res => res.data)
+
+
+/**
+ * 更新用户状态
+ * @param params params
+ */
+export const updateUser = params => instance.put(`${base}/user/${params.id}/${params.status}`).then(res => res.data)
+
+
+/**
+ * 更新用户信息
+ * @param params params
+ */
+export const updateUserInfo = params => instance.put(`${base}/user/${params.id}?${qs.stringify(params)}`).then(res => res.data)
+
+
+/**
+ * 踢用户下线
+ * @param params params
+ */
+export const offlineUser = params => instance.put(`${base}/kickout/${params.id}`).then(res => res.data)
+
+
+/**
+ * 获取上级列表
+ * @param params params
+ */
+export const parent = params => instance.get(`${base}/parent/${params.id}?${qs.stringify(params)}`).then(res => res.data)
+
+
+/**
+ * 获取下级列表
+ * @param params params
+ */
+export const children = params => instance.get(`${base}/children/${params.id}?${qs.stringify(params)}`).then(res => res.data)

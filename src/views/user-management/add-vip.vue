@@ -1,10 +1,10 @@
 <template>
-	<el-form :rules="editFormRules" :inline="true" ref="form" model="selectUserType" label-width="100px" @submit.prevent="onSubmit" style="margin-top:20px;width:100%;">
+	<el-form :rules="editFormRules" :inline="true" ref="userAdd" :model="userAdd"  label-width="100px" style="margin-top:20px;width:100%;">
 		<div>
             <el-form-item label="增加用户类型">
-                <el-select v-model="selectUserType" @change="checkFall" placeholder="请选择用户类型">
+                <el-select v-model="userAdd.selectUserType" @change="checkFall" placeholder="请选择用户类型">
                     <el-option
-                      v-for="(v, k) in userTypes"
+                      v-for="(v, k) in userAdd.userTypes"
                       :key="v.value"
                       :label="v.label"
                       :value="v.value"
@@ -16,26 +16,25 @@
         </div>
         <hr/>
         <div>
-            <el-form-item label="用户名" prop="name" >
-                <el-input v-model="userName" placeholder="请输入用户名" @change="checkFall"></el-input>
-                <p class="error-text" v-html="error_user_name"></p>
+            <el-form-item label="用户名" prop="userName" >
+                <el-input v-model="userAdd.userName" placeholder="请输入用户名" @change="checkFall"></el-input>
             </el-form-item>
-            <el-form-item label="用户密码" prop="name" >
-                <el-input v-model="userPsd" placeholder="请输入用户密码" @change="checkFall"></el-input>
+            <el-form-item label="用户密码" prop="pass" >
+                <el-input type="password" v-model="userAdd.userPsd" placeholder="请输入用户密码" @change="checkFall"></el-input>
             </el-form-item>
-            <el-form-item label="重复密码" prop="name" >
-                <el-input v-model="userRePsd" placeholder="请输入重复密码" @change="checkFall" @blur="checkRePsd"></el-input>
+            <el-form-item label="重复密码" prop="checkPass" >
+                <el-input type="password"  v-model="userAdd.userRePsd" placeholder="请输入重复密码" @change="checkFall" @blur="checkRePsd"></el-input>
             </el-form-item>
         </div>
-        <div v-if="selectUserType == `代理`">
-            <el-form-item label="反水类型" prop="name">
+        <div v-if="userAdd.selectUserType == `代理`">
+            <el-form-item label="反水类型" prop="selectType">
                 <el-select 
-                 v-model="selectType" 
+                 v-model="userAdd.selectType" 
                  placeholder="请选择反水类型" 
                  @change="checkFall"
                >
                 <el-option
-                  v-for="(v, k) in rebateTypes"
+                  v-for="(v, k) in userAdd.rebateTypes"
                   :key="v.value"
                   :label="v.label"
                   :value="v.value"
@@ -44,17 +43,17 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="通过备注" prop="name">
-                <el-input v-model="agreeRemark" placeholder="请输入通过备注" @change="checkFall"></el-input>
+            <el-form-item label="通过备注" prop="agreeRemark">
+                <el-input v-model="userAdd.agreeRemark" placeholder="请输入通过备注" @change="checkFall"></el-input>
             </el-form-item>
-            <el-form-item label="反水周期" prop="name">
+            <el-form-item label="反水周期" prop="rebateDuration">
                 <el-select 
-                 v-model="rebateDuration" 
+                 v-model="userAdd.rebateDuration" 
                  placeholder="请选择反水周期" 
                  @change="checkFall"
                >
                 <el-option
-                  v-for="(v, k) in waterPeriods"
+                  v-for="(v, k) in userAdd.waterPeriods"
                   :key="v.value"
                   :label="v.label"
                   :value="v.value"
@@ -66,21 +65,21 @@
         </div>
             
         <div>
-            <el-form-item label="备注" prop="name">
-                <el-input v-model="remark" placeholder="请输入备注" @change="checkFall"></el-input>
+            <el-form-item label="备注" prop="remarks">
+                <el-input v-model="userAdd.remark" placeholder="请输入备注" @change="checkFall"></el-input>
             </el-form-item>
-            <el-form-item label="手机号码">
-                <el-input v-model="phoneNumber" placeholder="请输入手机号码" @blur="checkPhone"></el-input>
+            <el-form-item label="手机号码" prop="phoneNumber">
+                <el-input v-model="userAdd.phoneNumber" placeholder="请输入手机号码" @blur="checkPhone"></el-input>
             </el-form-item>
             <el-form-item label="微信QQ">
-                <el-input v-model="qq" placeholder="请输入微信QQ"></el-input>
+                <el-input v-model="userAdd.qq" placeholder="请输入微信QQ"></el-input>
             </el-form-item>
         </div>
          <el-form-item>
             <el-button 
               type="primary" 
               size="large" 
-              :disabled="isEmpty"
+              :disabled="userAdd.isEmpty"
               @click="addClickBtn"
             >确定添加</el-button>
         </el-form-item>
@@ -89,12 +88,91 @@
 
 <script>
   import { checkPhoneNumber } from '../../common/js/tools';
-  import { ADD_NEUSER } from '../../api/api';
+  import { addUser } from '../../api/api';
 
 	export default {
     data() {
+      var checkAge = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('通过备注不能为空'));
+        }
+        callback();
+      };
+      var userNameRule = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('用户名不能为空'));
+        }
+        callback();
+      };
+      var remarksRule = (rule, value, callback) => {
+        if (this.userAdd.remark=='') {
+          return callback(new Error('备注不能为空'));
+        }
+        callback();     
+      };
+      var passRule = (rule, value, callback) => {
+        if (this.userAdd.userPsd=='') {
+          return callback(new Error('密码不能为空'));
+        }else{
+          if (this.userAdd.userRePsd == '') {
+            this.$refs.userAdd.validateField('checkPass');
+        }
+          callback();
+        }
+      };
+      var CheckPassRule = (rule, value, callback) => {
+        if (this.userAdd.userRePsd=='') {
+          return callback(new Error('请再次输入密码'));
+        }
+        if(this.userAdd.userRePsd!=this.userAdd.userPsd){
+          return callback(new Error('两次输入密码不一致，请重新输入！'));
+        }
+        callback();
+      };
+      var phoneNumberRule = (rule, value, callback) => {
+        let pn=this.userAdd.phoneNumber
+        let reg = new RegExp(/^1[3|4|5|7|8]\d{9}$/, 'g');
+        if (this.userAdd.phoneNumber=='') {
+          return callback(new Error('请输入手机号'));
+        }
+        
+        if(!reg.test(pn)) {
+          return callback(new Error('手机号码格式不正确，请重新输入'));
+        }
+        callback();
+      };
       return {
-        userTypes: [
+        editFormRules: {
+          userName: [
+            { validator: userNameRule, trigger: 'blur',required: true }
+          ],
+          pass: [
+            { validator: passRule, trigger: 'blur' ,required: true}
+          ],
+          checkPass: [
+            { validator: CheckPassRule, trigger: 'blur' ,required: true}
+          ],
+          age: [
+            { validator: checkAge, trigger: 'blur' ,required: true}
+          ],
+          selectType:[
+            { validator: checkAge, trigger: 'blur' ,required: true}
+          ],
+          agreeRemark:[
+            { validator: checkAge, trigger: 'blur' ,required: true}
+          ],
+          rebateDuration:[
+            { validator: checkAge, trigger: 'blur' ,required: true}
+          ],
+          remarks:[
+            { validator: remarksRule, trigger: 'blur' ,required: true}
+          ],
+          phoneNumber:[
+            { validator: phoneNumberRule, trigger: 'blur' }
+          ],
+        },
+        userAdd:{
+          userTypes: [
           {
             value: '会员',
             label: '会员'
@@ -102,48 +180,50 @@
             value: '代理',
             label: '代理'
           }
-        ],
-        waterPeriods: [
-          {
-            value: '0',
-            label: '请选择反水周期',
-            disabled: true
-          },{
-            value: '1',
-            label: '天'
-          },{
-            value: '7',
-            label: '周'
-          },{
-            value: '30',
-            label: '月'
-          }
-        ],
-        rebateTypes: [
-          {
-            value: '0',
-            label: '请选择反水类型',
-            disabled: true
-          },{
-            value: '1',
-            label: '按流水'
-          },{
-            value: '2',
-            label: '按盈利'
-          }
-        ],
-        selectUserType: '会员',
-        selectType: '0',
-        userName: '',
-        error_user_name: '',
-        userPsd: '',
-        userRePsd: '',
-        agreeRemark: '',
-        rebateDuration: '0',
-        phoneNumber: '',
-        qq: '',
-        remark: '',
-        isEmpty: true
+          ],
+          waterPeriods: [
+            {
+              value: '0',
+              label: '请选择反水周期',
+              disabled: true
+            },{
+              value: '1',
+              label: '天'
+            },{
+              value: '7',
+              label: '周'
+            },{
+              value: '30',
+              label: '月'
+            }
+          ],
+          rebateTypes: [
+            {
+              value: '0',
+              label: '请选择反水类型',
+              disabled: true
+            },{
+              value: '1',
+              label: '按流水'
+            },{
+              value: '2',
+              label: '按盈利'
+            }
+          ],
+          selectUserType: '会员',
+          selectType: '0',
+          userName: '',
+          error_user_name: '',
+          userPsd: '',
+          userRePsd: '',
+          agreeRemark: '',
+          rebateDuration: '0',
+          phoneNumber: '',
+          qq: '',
+          remark: '',
+          isEmpty: true
+        },
+        
       }
     },
     mounted() {
@@ -156,67 +236,75 @@
         this.error_user_name = '';
       },
       checkFall() {
-        if( this.userName != '' &&
-            this.userPsd != '' &&
-            this.userRePsd != '' && 
-            this.selectUserType != '0' &&
-            this.remark != ''
+        if( this.userAdd.userName != '' &&
+            this.userAdd.userPsd != '' &&
+            this.userAdd.userRePsd != '' && 
+            this.userAdd.selectUserType != '0' &&
+            this.userAdd.remark != ''
           ) {
-          if(this.selectUserType == '代理') {
-            if( this.rebateDuration != '0' &&
-                this.agreeRemark != '' &&
-                this.selectType != '0' ) {
-              this.isEmpty = false;
+          if(this.userAdd.selectUserType == '代理') {
+            if( this.userAdd.rebateDuration != '0' &&
+                this.userAdd.agreeRemark != '' &&
+                this.userAdd.selectType != '0' ) {
+              this.userAdd.isEmpty = false;
             } else {
-              this.isEmpty = true
+              this.userAdd.isEmpty = true
             }
           } else {
-            this.isEmpty = false;
+            this.userAdd.isEmpty = false;
           }
           
         } else {
-          this.isEmpty = true;
+          this.userAdd.isEmpty = true;
         }
       },
       gotoRate() {
         this.$router.replace({path: '/play-setting/set-rate'});
       },
       checkRePsd() {
-        if(this.userRePsd != this.userPsd) {
-          this.$message({
-            message: '两次输入密码不一致，请重新输入！',
-            duration: '1500',
-            type: 'error'
-          });
-          this.userRePsd = '';
-        }
+        // if(this.userAdd.userRePsd != this.userAdd.userPsd) {
+        //   this.$message({
+        //     message: '两次输入密码不一致，请重新输入！',
+        //     duration: '1500',
+        //     type: 'error'
+        //   });
+        //   this.userAdd.userRePsd = '';
+        // }
       },
       checkPhone() {
-        if(!checkPhoneNumber(this.phoneNumber)) {
-          this.phoneNumber = '';
-        }
+        // if(!checkPhoneNumber(this.userAdd.phoneNumber)) {
+        //   this.userAdd.phoneNumber = '';
+        // }
       },
       addClickBtn: async function() {
         let params = {
-          name: this.userName,
-          user_type: this.selectUserType,
-          password: this.userPsd,
-          re_password: this.userRePsd,
-          agree_remark: this.agreeRemark,
-          r_type: this.selectType,
-          phone_num: this.phoneNumber,
-          qq: this.qq,
-          remark: this.remark,
-          period: this.rebateDuration
+          name: this.userAdd.userName,
+          user_type: this.userAdd.selectUserType,
+          password: this.userAdd.userPsd,
+          re_password: this.userAdd.userRePsd,
+          agree_remark: this.userAdd.agreeRemark,
+          r_type: this.userAdd.selectType,
+          phone_num: this.userAdd.phoneNumber,
+          qq: this.userAdd.qq,
+          remark: this.userAdd.remark,
+          period: this.userAdd.rebateDuration
         }
-        const res = await $http.post(ADD_NEUSER, params, {'post': false});
-        if(res.data.id) {
-          this.$router.replace({path: '/user-management/user-lists'});
-          return;
-        }
-        if(res.data.exception == 200) {
-          this.error_user_name = res.data.message.name;
-        }
+        addUser(params).then(res => {
+            if(res.id) {
+               this.$message({
+                  message: '成功添加'+res.user_type+':'+res.name,
+                  type: 'success'
+                });
+              this.$router.replace({path: '/user-management/user_lists'});
+            return;
+            }
+          
+        });
+        // const res = await $http.post(ADD_NEUSER, params, {'post': false});
+        
+        // if(res.data.exception == 200) {
+        //  this.userAdd.error_user_name = res.message.name;
+        // }
       }
     }
   }
