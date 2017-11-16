@@ -277,3 +277,33 @@ export const parent = params => instance.get(`${base}/parent/${params.id}?${qs.s
  * @param params params
  */
 export const children = params => instance.get(`${base}/children/${params.id}?${qs.stringify(params)}`).then(res => res.data)
+
+
+
+
+/**
+ * 分页获取银行信息
+ * @param params params
+ */
+export const pagingBankInfo = params => instance.get(`${base}/bankInfo?${qs.stringify(params)}`).then(res => res.data)
+
+
+/**
+ * 更新银行信息
+ * @param params params
+ */
+export const updateBankInfo = params => instance.put(`${base}/bankinfo/${params.id}?${qs.stringify(params)}`).then(res => res.data)
+
+
+/**
+ * 分页获取登录日志
+ * @param params params
+ */
+export const pagingLoginLog = params => instance.get(`${base}/loginlog?${qs.stringify(params)}`).then(res => res.data)
+
+
+/**
+ * 用户充值
+ * @param params params
+ */
+export const accountRecharge = params => instance.post(`${base}/recharge?${qs.stringify(params)}`).then(res => res.data)
