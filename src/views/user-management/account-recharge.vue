@@ -1,25 +1,32 @@
 <template>
 	<el-form ref="form" :model="form" label-width="80px" style="margin:0 auto;width:300px;min-width:300px;margin-top:20px;">
     <el-form-item label="用户名" >
-			<el-autocomplete
-      class="inline-input"
-      v-model="form.uid"
-      :fetch-suggestions="querySearch"
-      placeholder="请输入内容"
-      @select="handleSelect"
-    ></el-autocomplete>
+      <el-select
+            v-model="form.uid"
+            filterable
+            remote
+            placeholder="请输入关键词"
+            :remote-method="pagingUser"
+            @change="select">
+            <el-option
+              v-for="item in userList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
 		</el-form-item>
-        <el-form-item label="账户余额">
-			<!-- <el-input v-model="account.name" placeholder="账户余额"></el-input> -->
+    <el-form-item label="账户余额">
+			{{accountBalance}}
 		</el-form-item>
-        <el-form-item label="备注">
-			<!-- <el-input v-model="account.name" placeholder="备注"></el-input> -->
+    <el-form-item label="备注">
+			{{remark}}
 		</el-form-item>
-        <el-form-item label="账户类型">
-			<!-- <el-input v-model="account.name" placeholder="用户名"></el-input> -->
+    <el-form-item label="账户类型">
+		  {{type}}
 		</el-form-item>
-        <el-form-item label="充值金额">
-			<el-input v-model="account.name" placeholder="充值金额"></el-input>
+    <el-form-item label="充值金额">
+			<el-input v-model="form.money" @blur="checkNumber($event)" placeholder="充值金额"></el-input>
 		</el-form-item>
         <el-form-item label="类型">
             <el-select v-model="form.type_id" placeholder="请选择类型">

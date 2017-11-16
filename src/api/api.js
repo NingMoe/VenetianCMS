@@ -4,15 +4,15 @@ import {
   Message
 } from 'element-ui';
 
-export const base = 'https://lottery.wns.52jbp.com';
+// export const base = 'https://lottery.wns.52jbp.com';
 
-// export const base = 'https://lottery.d1.t1.wxuny.com';
+export const base = 'https://lottery.d1.t1.wxuny.com';
 
-var instance = axios.create({
+export var instance = axios.create({
   headers: {
-    Authorization: localStorage.getItem('token'),
+    // Authorization: sessionStorage.getItem('token'),
     'content-type': 'application/x-www-form-urlencoded'
-  }
+    }
 });
 
 
@@ -24,7 +24,7 @@ instance.interceptors.request.use(config => {
 
   // config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
   config.headers = {
-    Authorization: localStorage.getItem('token'),
+    Authorization: sessionStorage.getItem('token'),
     'Content-Type': 'application/x-www-form-urlencoded'
   }
 
@@ -56,9 +56,9 @@ instance.interceptors.response.use(response => {
       type: 'error',
       duration: 5 * 1000
     });
-    console.log(data)
+    // console.log(data)
     // debugger
-    return Promise.reject(new Error(''));
+    // return Promise.reject(new Error(errorMsg));
   } else {
     return response;
   }
@@ -76,9 +76,9 @@ instance.interceptors.response.use(response => {
 
 
 //登录
-export const requestLogin = params => {
-  return instance.post(`${base}/auth`, qs.stringify(params)).then(res => res.data);
-};
+// export const requestLogin = params => {return instance.post(`${base}/auth`, qs.stringify(params)).then(res => res.data);};
+export const requestLogin = params => instance.post(`${base}/auth`,`${qs.stringify(params)}`).then(res => res.data)
+
 
 /**
  * 提现请求
@@ -303,7 +303,42 @@ export const pagingLoginLog = params => instance.get(`${base}/loginlog?${qs.stri
 
 
 /**
+ * 分页获取管理员登录日志
+ * @param params params
+ */
+export const pagingManagerLoginLog = params => instance.get(`${base}/managerloginlog?${qs.stringify(params)}`).then(res => res.data)
+
+
+/**
  * 用户充值
  * @param params params
  */
 export const accountRecharge = params => instance.post(`${base}/recharge?${qs.stringify(params)}`).then(res => res.data)
+
+
+
+
+/**
+ * 获取管理员列表
+ */
+export const pagingManager = () => instance.get(`${base}/manager`).then(res => res.data)
+
+
+
+/**
+ * 添加管理员
+ * @param params params
+ */
+export const addManager = params => instance.post(`${base}/manager?${qs.stringify(params)}`).then(res => res.data)
+
+/**
+ * 修改管理员密码
+ * @param params 管理员信息
+ */
+export const updateManager = params => instance.put(`${base}/manager/${params.id}?${qs.stringify(params)}`).then(res => res.data)
+
+/**
+ * 删除管理员
+ * @param  params 管理员id
+ */
+export const deleteManager = params => instance.delete(`${base}/manager/${params}`).then(res => res.data)

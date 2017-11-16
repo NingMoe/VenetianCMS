@@ -2,74 +2,49 @@
 	<section>
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" :model="filters">
+			<el-form :inline="true">
 				<el-form-item>
-					<el-button type="primary" @click="handleAdd">添加管理员</el-button>
+					<el-button type="primary" @click="addVip">添加管理员</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="users" highlight-current-row v-loading="listLoading" element-loading-text="拼命加载中..." @selection-change="selsChange" style="width: 100%;"border>
-			<el-table-column prop="name" label="UID" width="200" sortable align="center">
+		<el-table :data="data" highlight-current-row v-loading="listLoading" element-loading-text="拼命加载中..." style="width: 100%;"border>
+			<el-table-column prop="id" label="UID" width="200"  align="center">
 			</el-table-column>
-			<el-table-column prop="sex" label="用户名" width="200" :formatter="formatSex" sortable align="center">
+			<el-table-column prop="name" label="用户名" width="200"  align="center">
 			</el-table-column>
-			<el-table-column prop="age" label="登录IP" width="200" sortable align="center">
+			<el-table-column prop="logip" label="登录IP" width="200"  align="center">
 			</el-table-column>
-			<el-table-column prop="birth" label="状态" width="200" sortable align="center">
+			<el-table-column prop="state" label="状态" width="200"  align="center">
 			</el-table-column>
-			<el-table-column prop="addr" label="最后登录时间" min-width="200" sortable align="center">
+			<el-table-column prop="now_log_time" label="最后登录时间" min-width="200"  align="center">
 			</el-table-column>
 			<el-table-column label="操作" min-width="150" align="center">
 				<template scope="scope">
-					<el-button type="primary" size="small" @click="handleEdit(scope.$index, scope.row)">修改密码</el-button>
-					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+					<el-button type="primary" size="small" @click="editVip(scope.$index)">修改密码</el-button>
+          <el-button type="danger" size="small" @click="removeList($event,scope.$index)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
 
-		<!--工具条-->
-		<el-col :span="24" class="toolbar">
-			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="15" :total="total" style="float:right;">
-			</el-pagination>
-		</el-col>
-
 		<!--编辑界面-->
-		<el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false" size="tiny">
-			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
+		<el-dialog :title="title" :visible.sync="managerFormVisible" size="tiny">
+			<el-form :model="managerForm" label-width="80px" :rules="rules" ref="managerForm">
 				<el-form-item label="用户名" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off" :disabled="true"></el-input>
+					<el-input v-model="managerForm.name" auto-complete="off" :disabled="title === '添加管理员' ? false :  true"></el-input>
 				</el-form-item>
-                <el-form-item label="密码" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
+                <el-form-item label="密码" prop="pwd">
+					<el-input v-model="managerForm.pwd" auto-complete="off"></el-input>
 				</el-form-item>
-                <el-form-item label="重复密码" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
+                <el-form-item label="重复密码" prop="rePwd">
+					<el-input v-model="managerForm.rePwd" auto-complete="off"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
-				<el-button @click.native="editFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">确定</el-button>
-			</div>
-		</el-dialog>
-
-		<!--新增界面-->
-		<el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false" size="tiny">
-			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="用户名" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
-				</el-form-item>
-                <el-form-item label="密码" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
-				</el-form-item>
-                <el-form-item label="重复密码" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
-				</el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click.native="addFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="addSubmit" :loading="addLoading">确定</el-button>
+				<el-button @click="managerFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitEditForm">确 定</el-button>
 			</div>
 		</el-dialog>
 	</section>
@@ -78,196 +53,121 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+	import { pagingManager, addManager, updateManager, deleteManager } from '../../api/api';
 
-	export default {
-		data() {
-			return {
-				filters: {
-					name: ''
-				},
-				users: [],
-				total: 0,
-				page: 1,
-				listLoading: false,
-				sels: [],//列表选中列
-
-				editFormVisible: false,//编辑界面是否显示
-				editLoading: false,
-				editFormRules: {
-					name: [
-						{ required: true, message: '请输入姓名', trigger: 'blur' }
-					]
-				},
-				//编辑界面数据
-				editForm: {
-					id: 0,
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				},
-
-				addFormVisible: false,//新增界面是否显示
-				addLoading: false,
-				addFormRules: {
-					name: [
-						{ required: true, message: '请输入姓名', trigger: 'blur' }
-					]
-				},
-				//新增界面数据
-				addForm: {
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				}
-
-			}
-		},
-		methods: {
-			//性别显示转换
-			formatSex: function (row, column) {
-				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
-			},
-			handleCurrentChange(val) {
-				this.page = val;
-				this.getUsers();
-			},
-			//获取用户列表
-			getUsers() {
-				let para = {
-					page: this.page,
-					name: this.filters.name
-				};
-				this.listLoading = true;
-				//NProgress.start();
-				getUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.data.users;
-					this.listLoading = false;
-                    //NProgress.done();
-                    console.log(this.users)
-                });
-			},
-			//删除
-			handleDel: function (index, row) {
-				this.$confirm('确认删除该记录吗?', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { id: row.id };
-					removeUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
-				}).catch(() => {
-
-				});
-			},
-			//显示编辑界面
-			handleEdit: function (index, row) {
-				this.editFormVisible = true;
-				this.editForm = Object.assign({}, row);
-			},
-			//显示新增界面
-			handleAdd: function () {
-				this.addFormVisible = true;
-				this.addForm = {
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				};
-			},
-			//编辑
-			editSubmit: function () {
-				this.$refs.editForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.editLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.editForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							editUser(para).then((res) => {
-								this.editLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['editForm'].resetFields();
-								this.editFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
-			},
-			//新增
-			addSubmit: function () {
-				this.$refs.addForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.addLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.addForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							addUser(para).then((res) => {
-								this.addLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['addForm'].resetFields();
-								this.addFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
-			},
-			selsChange: function (sels) {
-				this.sels = sels;
-			},
-			//批量删除
-			batchRemove: function () {
-				var ids = this.sels.map(item => item.id).toString();
-				this.$confirm('确认删除选中记录吗？', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { ids: ids };
-					batchRemoveUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
-				}).catch(() => {
-
-				});
-			}
-		},
-		mounted() {
-			this.getUsers();
-		}
-	}
-
+export default {
+      data() {
+        var validatePass = (rule, value, callback) => {
+          if (value === '') {
+            callback(new Error('请输入密码'));
+          } else {
+            if (this.managerForm.checkPass !== '') {
+              this.$refs.managerForm.validateField('rePwd');
+            }
+            callback();
+          }
+        };
+        var validatePass2 = (rule, value, callback) => {
+          if (value === '') {
+            callback(new Error('请再次输入密码'));
+          } else if (value !== this.managerForm.pwd) {
+            callback(new Error('两次输入密码不一致!'));
+          } else {
+            callback();
+          }
+        };
+        return {
+          listLoading:false,
+          title: '',
+          managerFormVisible: false,
+          isEmpty: true,
+          userInfo: '',
+          total: 0,
+          data: [],
+          managerForm: {
+            index: -1,
+            name: '',
+            pwd: '',
+            rePwd: '',
+            group_id: 1
+          },
+          rules: {
+            pwd: [
+              { validator: validatePass, trigger: 'blur' }
+            ],
+            rePwd: [
+              { validator: validatePass2, trigger: 'blur' }
+            ],
+          }
+        }
+      },
+      mounted() {
+        this.pagingManagers();
+      },
+      methods: {
+        pagingManagers() {
+          pagingManager().then(res => {
+            this.data = res.data;
+            this.total = res.total;
+          })
+        },
+        removeList(event, key) {
+          let ele = event.target;
+          if(this.data.length <= 1) {
+            this.$message({
+              message: '唯一管理员不能删除',
+              type: 'warning',
+              duration: '1500'
+            });
+            return;
+          }
+          deleteManager(this.data[key].id).then(() => {
+            this.data.splice(key, 1);
+            this.$message({
+              type: 'success',
+              message: '删除管理员成功'
+            });
+          });
+        },
+        addVip() {
+          if (this.$refs['managerForm'])
+            this.$refs['managerForm'].resetFields();
+          this.managerForm.name = '';
+          this.title = '添加管理员';
+          this.managerFormVisible = true;
+        },
+        editVip(index,name) {
+          if (this.$refs['managerForm'])
+            this.$refs['managerForm'].resetFields();
+          this.title = '修改管理员密码';
+          Object.assign(this.managerForm, this.data[index]);
+          this.managerForm.index = index;
+          this.managerFormVisible = true;
+          console.log(this.data[index].name);
+        },
+        submitEditForm() {
+          if (this.title === '添加管理员') {
+            addManager(this.managerForm).then(() => {
+              this.pagingManagers();
+              this.managerFormVisible = false;
+              this.$message({
+                type: 'success',
+                message: '添加管理员成功'
+              });
+            })
+          } else {
+            updateManager(this.managerForm).then(() => {
+              Object.assign(this.data[this.managerForm.index], this.managerForm);
+              this.managerFormVisible = false;
+              this.$message({
+                type: 'success',
+                message: '修改管理员密码成功'
+              });
+            })
+          }
+        }
+      }
+  }
 </script>
 
 <style scoped>

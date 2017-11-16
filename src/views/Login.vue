@@ -18,7 +18,7 @@
 
 <script>
 
-  import { requestLogin } from '../api/api';
+  import { requestLogin ,instance } from '../api/api';
   //import NProgress from 'nprogress'
    export default {
     name: 'login',
@@ -56,19 +56,28 @@
           'name': this.loginForm.username,
           'password': this.loginForm.password
         }).then(data => {
+          console.log(this.loginForm)
+          console.log(data)
           if (!data.token) {
             return
           }
-          window.sessionStorage.setItem('token', data.token)
+          sessionStorage.setItem('token', data.token)
           window.localStorage.setItem('token', data.token)
           window.localStorage.setItem('userName', data.name)
           this.$router.push({ path: '/main' })
         //   console.log(window.localStorage.token)
-        });
+
+        }).then(() => {
+          // location.reload();
+        })
       }
     },
     destroyed() {
         // window.removeEventListener('hashchange', this.afterQRScan);
+    },
+    mounted() {
+      // localStorage.removeItem("token");
+      console.log(instance)
     }
   }
 

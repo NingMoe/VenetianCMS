@@ -140,8 +140,13 @@ export default {
         //type: 'warning'
       })
         .then(() => {
-          sessionStorage.removeItem("token");
+          window.sessionStorage.removeItem('token');
+          window.localStorage.removeItem('token');
+          window.localStorage.removeItem('userName')
           _this.$router.push("/login");
+          
+        }).then(() => {
+          // location.reload();
         })
         .catch(() => {});
     },
