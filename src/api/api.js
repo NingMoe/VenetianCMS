@@ -342,3 +342,17 @@ export const updateManager = params => instance.put(`${base}/manager/${params.id
  * @param  params 管理员id
  */
 export const deleteManager = params => instance.delete(`${base}/manager/${params}`).then(res => res.data)
+
+
+
+/**
+ * 获取代理佣金列表
+ */
+export const cashback = params => instance.get(`${base}/cashback?${qs.stringify(params)}`).then(res => res.data)
+
+
+/**
+ * 发放用户
+ * @param params params
+ */
+export const updateCashback = params => instance.put(`${base}/cashback/${params.uid}?${qs.stringify(params)}`).then(res => res.data)
