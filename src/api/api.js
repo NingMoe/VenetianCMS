@@ -356,3 +356,102 @@ export const cashback = params => instance.get(`${base}/cashback?${qs.stringify(
  * @param params params
  */
 export const updateCashback = params => instance.put(`${base}/cashback/${params.uid}?${qs.stringify(params)}`).then(res => res.data)
+
+
+
+/**
+ * 分页获取系统公告
+ * @param params page info
+ */
+export const pagingNotice = params => instance.get(`${base}/notice?${qs.stringify(params)}`).then(res => res.data)
+
+/**
+ * 添加系统公告
+ * @param params 公告信息
+ */
+export const addNotice = params => instance.post(`${base}/notice?${qs.stringify(params)}`).then(res => res.data)
+
+/**
+ * 修改系统公告
+ * @param params 公告信息
+ */
+export const updateNotice = params => instance.put(`${base}/notice/${params.id}?${qs.stringify(params)}`).then(res => res.data)
+
+/**
+ * 删除系统公告
+ * @param params 公告id
+ */
+export const deleteNotice = params => instance.delete(`${base}/notice/${params}`).then(res => res.data)
+
+
+
+/**
+ * 系统收款设置
+ */
+export const getAccountConfig = () => instance.get(`${base}/config/account`).then(res => res.data)
+
+/**
+ * 修改系统收款设置
+ * @param params 收款设置
+ */
+export const updateAccountConfig = params => instance.put(`${base}/config/account?${qs.stringify(params)}`).then(res => res.data)
+
+
+
+
+
+/**
+ * 系统当前模式
+ * 1是预设模式，2是盈利模式
+ * 预设模式显示预设选项
+ */
+export const presetModel = () => instance.get(`${base}/config/mode`).then(res => res.data)
+
+/**
+ * 更新系统预设模式
+ * @param {*params} params
+ */
+export const updatePresetModel = params => instance.put(`${base}/config/mode?${qs.stringify(params)}`).then(res => res.data)
+
+
+
+/**
+ * 清理用户数据
+ * @param params params
+ */
+export const cleanUp = params => instance.put(`${base}/cleanup?${qs.stringify(params)}`).then(res => res.data)
+
+
+/**
+ * 获取预设的开奖条数
+ */
+export const presupposenumber = () => instance.get(`${base}/config/presupposenumber`).then(res => res.data)
+
+
+/**
+ * 更新预设的开奖条数
+ * @param params params
+ */
+export const updatePresupposenumber = params => instance.put(`${base}/config/presupposenumber?${qs.stringify(params)}`).then(res => res.data)
+
+
+
+/**
+ * 发送邮件
+ * @param params params
+ */
+export const sendMessage = params => instance.post(`${base}/message?${qs.stringify(params)}`).then(res => res.data)
+
+
+/**
+ * 分页获取发送的信息
+ * @param params params
+ */
+export const pagingOutbox = params => instance.get(`${base}/message/outbox?${qs.stringify(params)}`).then(res => res.data)
+
+
+/**
+ * 收件箱删除邮件
+ * @param params params
+ */
+export const recallMessage = params => instance.delete(`${base}/message/${params}`).then(res => res.data)

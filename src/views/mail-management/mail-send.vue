@@ -2,42 +2,47 @@
 	
     <div class="mailbox">
         <div class="boxleft">
-            <el-form ref="form" :model="filters" label-width="80px">
+            <el-form ref="form" :model="form" label-width="80px">
             
             <el-form-item label="收件人">
-                <el-select v-model="filters.region" placeholder="请选择收件人">
-                <el-option label="全部会员" value="wholevip"></el-option>
-                <el-option label="全部代理" value="wholeagent"></el-option>
-                <el-option label="部分会员" value="partvip"></el-option>
+                <el-select v-model="form.message_type" placeholder="请选择收件人" @change="messageTypeChange">
+                <el-option label="全部会员" value="会员"></el-option>
+                <el-option label="全部代理" value="代理"></el-option>
+                <el-option label="部分会员" value="其他"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="主题">
-                <el-input v-model="filters.name" placeholder="请输入主题"></el-input>
+                <el-input v-model="mailTitle" placeholder="请输入主题"></el-input>
             </el-form-item>
             <el-form-item label="内容" >
-                <el-input type="textarea" v-model="filters.desc" placeholder="请输入内容"></el-input>
+                <el-input type="textarea" v-model="mailBody" placeholder="请输入内容"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="onSubmit">发送</el-button>
+                <el-button type="primary" @click="send">发送</el-button>
             </el-form-item>
             </el-form>
         </div>
-        <div class="boxright" v-if="filters.region=='partvip'">
-            <el-form ref="form" :model="filters" label-width="100px">
+        <div class="boxright" v-show="initRadio">
+            <el-form ref="form" :model="search" label-width="100px">
                 
                 <el-form-item label="用户名或备注">
                     <el-input
                     placeholder="请输入用户名或备注"
                     icon="search"
-                    v-model="input2"
-                    :on-icon-click="handleIconClick">
+                    v-model="search.user_name"
+                    :on-icon-click="pagingUser">
                     </el-input>
                 </el-form-item>
             </el-form>
-           <el-table :data="users" highlight-current-row v-loading="listLoading" element-loading-text="拼命加载中..." @selection-change="selsChange" style="width: 100%;">
-			<el-table-column prop="name" label="姓名" min-width="100" sortable align="center">
+    <el-table ref="multipleTable" :data="data" border v-loading="listLoading" element-loading-text="拼命加载中..." @selection-change="handleSelectionChange" style="width: 100%;">
+			<el-table-column
+            type="selection"
+            class-name="cells"
+            width="55">
+      </el-table-column>
+      <el-table-column prop="name" label="姓名" min-width="100" sortable align="center">
 			</el-table-column>
-			<el-table-column prop="sex" label="备注" min-width="100"  align="center">
+			<el-table-column prop="remark" label="备注" min-width="100"  align="center">
 			</el-table-column>
 		</el-table>
         </div>
@@ -69,170 +74,120 @@
 </style>
 
 <script>
-import util from '../../common/js/util'
-	//import NProgress from 'nprogress'
-    import { getvUserListPage, removeUser, batchRemoveUser, editUser, addUser ,getvUserList } from '../../api/api';
+
+import { pagingUser, sendMessage } from '../../api/api';
     
-	export default {
-		data() {
-			return {
-				filters: {
-					name: '',
-					region: 'partvip',
-					date1: '',
-					date2: '',
-					delivery: false,
-					type: [],
-					resource: '',
-                    desc: ''
-                    ,viptype:'qbvip'
-				}
-			}
-		},
-		methods: {
-			//性别显示转换
-			formatSex: function (row, column) {
-				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
-			},
-			handleCurrentChange(val) {
-				this.page = val;
-				this.getUsers();
-			},
-			//获取用户列表
-			getUsers() {
-				let para = {
-					page: this.page,
-					name: this.filters.name
-				};
-				this.listLoading = true;
-				//NProgress.start();
-				getvUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.data.users;
-					this.listLoading = false;
-                    //NProgress.done();
-                    // console.log(this.users)
-                });
-                // console.log(getvUserListPage(''))
-			},
-			//删除
-			handleFreeze: function (index, row) {
-				this.$confirm('确认冻结该用户吗?', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { id: row.id };
-					removeUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '冻结成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
-				}).catch(() => {
-
-				});
-			},
-			//显示编辑界面
-			handleEdit: function (index, row) {
-				this.editFormVisible = true;
-				this.editForm = Object.assign({}, row);
-			},
-			//显示新增界面
-			handleAdd: function () {
-				this.addFormVisible = true;
-				this.addForm = {
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				};
-			},
-			//编辑
-			editSubmit: function () {
-				this.$refs.editForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.editLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.editForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							editUser(para).then((res) => {
-								this.editLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['editForm'].resetFields();
-								this.editFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
-			},
-			//新增
-			addSubmit: function () {
-				this.$refs.addForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.addLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.addForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							addUser(para).then((res) => {
-								this.addLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['addForm'].resetFields();
-								this.addFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
-			},
-			selsChange: function (sels) {
-				this.sels = sels;
-			},
-			//批量删除
-			batchRemove: function () {
-				var ids = this.sels.map(item => item.id).toString();
-				this.$confirm('确认删除选中记录吗？', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { ids: ids };
-					batchRemoveUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
-				}).catch(() => {
-
-				});
-			}
-		},
-		mounted() {
-            this.getUsers();
-            ()=>{
-                console.log(this.users)
-                
-            }
-		}
-	}
-
+export default {
+    data() {
+        return {
+          listLoading:false,
+          options: [{
+            value: '会员',
+            label: '全部会员'
+          }, {
+            value: '代理',
+            label: '全部代理'
+          }, {
+            value: '其他',
+            label: '部分会员'
+          }],
+          form: {
+            message_type: '其他',
+          },
+          initRadio: 1,
+          mailTitle: '',
+          mailBody: '',
+          checkAll: false,
+          checkedState: [],
+          checkedLen: 0,
+          total: 0,
+          search: {
+            user_name: '',
+            per_page: 5,
+            current_page: 1
+          },
+          data: [],
+          selection: []
+        }
+    },
+    mounted() {
+      this.pagingUser();
+    },
+    methods: {
+      pageChange(pageNo) {
+        this.search.current_page = pageNo;
+        this.pagingUser();
+      },
+      pagingUser() {
+        pagingUser(this.search).then(res => {
+          this.total = res.total;
+          this.data = res.data;
+        });
+      },
+      send() {
+        if (this.form.message_type === '其他' && this.selection.length === 0) {
+          this.$message({
+            type: 'error',
+            message: '请选择收件人'
+          });
+          return
+        } else if (this.mailTitle.trim() === '') {
+          this.$message({
+            type: 'error',
+            message: '请填写主题'
+          });
+          return
+        } else if (this.mailBody.trim() === '') {
+          this.$message({
+            type: 'error',
+            message: '请填写内容'
+          });
+          return
+        }
+        let selects = ''
+        this.selection.forEach(function(item, index, array) {
+          if (index == 0) {
+            selects += item.id;
+          } else {
+            selects += ',' + item.id;
+          }
+          
+        });
+        const params = {
+          send_author: localStorage.getItem('userName'),
+          message_type: this.form.message_type,
+          users: selects,
+          title: this.mailTitle,
+          content: this.mailBody
+        }
+        sendMessage(params).then(() => {
+          this.$message({
+            type: 'success',
+            message: '发送成功'
+          });
+          this.$router.replace({path: '/mail-management/mail-outbox'});
+        })
+      },
+      toggleSelection(rows) {
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row);
+          });
+        } else {
+          this.$refs.multipleTable.clearSelection();
+        }
+      },
+      handleSelectionChange(val) {
+        this.selection = val;
+      },
+      messageTypeChange(checkVal) {
+        if ('其他' === checkVal) {
+          this.initRadio = 1;
+        } else {
+          this.initRadio = 0;
+          this.$refs.multipleTable.clearSelection();
+        }
+      }
+    }
+  }
 </script>

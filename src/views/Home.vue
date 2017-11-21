@@ -473,6 +473,7 @@ export default {
       background: #f2f2f2;
       box-sizing: border-box;
       overflow-y: scroll;
+      border-radius: 5px;
     }
     .rowbox {
       height: 100%;

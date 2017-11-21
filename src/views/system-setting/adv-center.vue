@@ -2,33 +2,36 @@
 	<section>
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" :model="filters">
+			<el-form :inline="true">
 				<el-form-item>
-					<el-button type="primary" v-on:click="getData">添加公告</el-button>
+					<el-button type="primary" v-on:click="addNotice">添加公告</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
 		<!--列表-->
-		<el-table :data="users" highlight-current-row v-loading="listLoading" element-loading-text="拼命加载中..." style="width: 100%;" border>
-			<el-table-column prop="name" label="标题" min-width="120" sortable align="center">
+		<el-table :data="lists" highlight-current-row v-loading="listLoading" element-loading-text="拼命加载中..." style="width: 100%;" border>
+			<el-table-column prop="title" label="标题" min-width="120" align="center">
 			</el-table-column>
-			<el-table-column prop="" label="作者" min-width="100" sortable align="center">
+			<el-table-column prop="send_author" label="作者" min-width="100" align="center">
 			</el-table-column>
-			<el-table-column prop="" label="内容" min-width="100"  align="center">
+			<el-table-column prop="content" label="内容" min-width="100"  align="center">
+        <template scope="scope">
+          <div v-html="lists[scope.$index].content"></div>
+        </template>
 			</el-table-column>
-			<el-table-column prop="" label="日期" min-width="120"  align="center">
+			<el-table-column prop="create_time" label="日期" min-width="120"  align="center">
 			</el-table-column>
-            <el-table-column label="操作" min-width="150" align="center">
+      <el-table-column label="操作" min-width="150" align="center">
 				<template scope="scope">
-					<el-button type="primary" size="small" @click="handleEdit(scope.$index, scope.row)">修改密码</el-button>
-					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+					<el-button type="primary" size="small" @click="editorHTML($event, scope.$index)">编辑</el-button>
+          <el-button type="danger" size="small" @click="removeList($event, scope.$index)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
-			<el-pagination layout="total,prev, pager, next" @current-change="handleCurrentChange" :page-size="15" :total="total" style="float:right;">
+			<el-pagination layout="total,prev, pager, next" @current-change="pageChange" :page-size="search.per_page" :total="total" :current-page="search.current_page" style="float:right;">
 			</el-pagination>
 		</el-col>
 
@@ -36,59 +39,66 @@
 </template>
 
 <script>
-	import util from '../../common/js/util'
-	//import NProgress from 'nprogress'
-	import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+
+	import { deleteNotice, pagingNotice } from '../../api/api';
 
 	export default {
-		data() {
-			return {
-				filters: {
-                    name: '',
-                    LastLoginTime: ''
-				},
-				users: [],
-				total: 0,
-				page: 1,
-				listLoading: false,
-			}
-		},
-		methods: {
-			handleCurrentChange(val) {
-				this.page = val;
-				this.getData();
-			},
-			//获取用户列表
-			getData() {
-				let para = {
-					page: this.page,
-					name: this.filters.name
-				};
-				this.listLoading = true;
-				//NProgress.start();
-				getUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.data.users;
-					this.listLoading = false;
-                    //NProgress.done();
-                    console.log(this.users)
-                });
-                console.log(this.filters.LastLoginTime)
-            },
+      data() {
+        return {
+          listLoading:false,
+          isEmpty: true,
+          userInfo: '',
+          total: 0,
+          search: {
+            per_page: 10,
+            current_page: 1
+          },
+          lists: []
+        }
+      },
+      mounted() {
+        this.paging();
+      },
+      methods: {
+        pageChange(pageNo) {
 
-            resetting(){
-                this.filters.name=''
-                this.getData();
-            },
-            pickerOptions(){
-
+        },
+        removeList(e, index) {
+          let $this = this;
+          deleteNotice($this.lists[index].id).then( res => {
+            if(res.message == '删除成功') {
+              $this.lists = $this.lists.filter((v, k) => {
+                if(v.id != $this.lists[index].id) {
+                  return v;
+                }
+              });
+              this.total = this.total - 1;
             }
-		},
-		mounted() {
-			this.getData();
-		}
-	}
-
+          })
+        },
+        addNotice() {
+          this.$router.push({
+            path: '/editor/index'
+          })
+        },
+        paging() {
+          pagingNotice(this.search).then(res => {
+            this.total = res.total;
+            this.lists = res.data;
+          })
+        },
+        editorHTML(event, index) {
+          this.$router.push({
+            path: '/editor/index',
+            query: {
+              'id': this.lists[index].id,
+              'title': this.lists[index].title,
+              'content': this.lists[index].content
+            }
+          })
+        }
+      }
+  }
 </script>
 
 <style scoped>

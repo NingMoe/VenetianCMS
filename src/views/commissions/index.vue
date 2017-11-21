@@ -3,27 +3,7 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="search" ref="search">
-        <el-form-item label="反水类型" prop="issue">
-          <el-select v-model="search.r_type" placeholder="请选择彩种类型">
-            <el-option
-              v-for="(v, k) in fsTypes"
-              :key="v.value"
-              :label="v.label"
-              :value="v.value"
-              :disabled="v.disabled"
-              ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="反水时间选择" prop="issue">
-          <el-select v-model="search.period" placeholder="请选择彩种类型">
-            <el-option
-              v-for="(v, k) in fsTimeSelect"
-              :key="v.value"
-              :label="v.label"
-              :value="v.value"  
-              ></el-option>
-          </el-select>
-          </el-form-item>
+        
             <el-form-item label="日期范围">
                 <el-date-picker
                   v-model="search.time"
@@ -36,6 +16,29 @@
             <el-form-item>
               <el-button type="primary" @click="init('search')">查询</el-button>
             </el-form-item>
+            <div>
+              <el-form-item label="反水类型" prop="issue">
+                <el-select v-model="search.r_type" placeholder="请选择彩种类型" @change="rTypeChange">
+                  <el-option
+                    v-for="(v, k) in fsTypes"
+                    :key="v.value"
+                    :label="v.label"
+                    :value="v.value"
+                    :disabled="v.disabled"
+                    ></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="反水时间选择" prop="issue">
+                <el-select v-model="search.period" placeholder="请选择彩种类型" @change="periodChange">
+                  <el-option
+                    v-for="(v, k) in fsTimeSelect"
+                    :key="v.value"
+                    :label="v.label"
+                    :value="v.value"  
+                    ></el-option>
+                </el-select>
+              </el-form-item>
+            </div>
 			</el-form>
 		</el-col>
 		<!--列表-->
@@ -64,8 +67,10 @@
       <el-table-column prop="account_balance" label="账户余额" min-width="100" align="center">
 			</el-table-column>
       <el-table-column label="操作" min-width="100" align="center">
-        <template scope="scope">
-        <el-button type="primary" size="small" @click="handOut($event, $index)">发放</el-button>
+        
+        <template scope="scope" >
+          <span v-if="agentDatas[scope.$index].code==`1`">已发放</span>
+          <el-button v-else type="primary" size="small" @click="handOut($event, scope.$index)">发放</el-button>
         </template>
 			</el-table-column>
 		</el-table>
@@ -127,21 +132,6 @@ export default {
           label: "每月"
         }
       ],
-      agentHead: [
-        "用户名",
-        "反水类型",
-        "返现周期",
-        "上周期内流水",
-        "上周期活动赠送",
-        "上周期内输赢",
-        "上周期内净输赢",
-        "本周期内输赢",
-        "上周期内充值",
-        "上周期系统充值",
-        "周期时间节点",
-        "会员剩余总额",
-        "操作"
-      ],
       agentDatas: [],
       total: 0
     };
@@ -155,8 +145,10 @@ export default {
       this.init();
     },
     rTypeChange(val) {
+      // console.log(val)
       this.search.r_type = val;
       this.init();
+
     },
     agreeRemark(ag) {
       let reg = new RegExp(/^[\d-\.]+$/, "g");
@@ -166,9 +158,11 @@ export default {
       return ag;
     },
     init() {
+      this.listLoading=true
       cashback(this.search).then(res => {
         this.total = res.total;
         this.agentDatas = res.data;
+        this.listLoading=false
       });
     },
     pageChange(pageNo) {
@@ -184,12 +178,8 @@ export default {
       this.search.interval =
         intervalArr[0].trim() + "," + intervalArr[1].trim();
     },
-    removeList(event, key) {
-      this.$message({ message: "功能开发中..." });
-      // let ele = event.target;
-      // this.agentDatas = this.agentDatas.filter((val, i) => key != i);
-    },
     handOut(event, index) {
+      console.log(index)
       this.$prompt("请输入 " + this.agentDatas[index].user_name + " 的发放金额", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
