@@ -4,9 +4,9 @@ import {
   Message
 } from 'element-ui';
 
-// export const base = 'https://lottery.wns.52jbp.com';
+export const base = 'https://lottery.wns.52jbp.com';
 
-export const base = 'https://lottery.d1.t1.wxuny.com';
+// export const base = 'https://lottery.d1.t1.wxuny.com';
 
 export var instance = axios.create({
   headers: {
@@ -114,17 +114,7 @@ export const pagingGeneralBets = params => instance.get(`${base}/ticket?${qs.str
  */
 export const withdrawals = params => instance.put(`${base}/ticket/${params.id}?${qs.stringify(params)}`).then(res => res.data)
 
-// /**
-//  * 更新用户状态
-//  * @param params params
-//  */
-// export const updateUser = params => instance.put(`${base}/user/${params.id}/${params.status}`).then(res => res.data)
 
-// /**
-//  * 更新用户信息
-//  * @param params params
-//  */
-// export const updateUserInfo = params => instance.put(`${base}/user/${params.id}?${qs.stringify(params)}`).then(res => res.data)
 
 
 /**
@@ -455,3 +445,25 @@ export const pagingOutbox = params => instance.get(`${base}/message/outbox?${qs.
  * @param params params
  */
 export const recallMessage = params => instance.delete(`${base}/message/${params}`).then(res => res.data)
+
+
+
+/**
+ * 分页获取代理申请记录
+ * @param params params
+ */
+export const pagingRelationship = params => instance.get(`${base}/referrerapplication?${qs.stringify(params)}`).then(res => res.data)
+
+
+/**
+ * 修改代理申请状态
+ * @param params params
+ */
+export const handleReferrerapplication = params => instance.put(`${base}/referrerapplication/${params.id}?${qs.stringify(params)}`).then(res => res.data)
+
+
+
+// export const LOTTERY_RESULT = '/lotteryresult'; //查询开奖数据
+
+
+export const lotteryResult = params => instance.get(`${base}/lotteryresult/${params.type}?${qs.stringify(params.ask)}`).then(res => res.data)
