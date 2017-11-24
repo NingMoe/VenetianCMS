@@ -4,9 +4,9 @@ import {
   Message
 } from 'element-ui';
 
-export const base = 'https://lottery.wns.52jbp.com';
+// export const base = 'https://lottery.wns.52jbp.com';
 
-// export const base = 'https://lottery.d1.t1.wxuny.com';
+export const base = 'https://lottery.d1.t1.wxuny.com';
 
 export var instance = axios.create({
   headers: {
